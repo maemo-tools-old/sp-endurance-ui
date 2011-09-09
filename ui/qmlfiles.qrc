@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qmldir/main.qml</file>
+        <file>qmldir/MainPage.qml</file>
+        <file>qmldir/ReportingControl.qml</file>
+        <file>qmldir/Header.qml</file>
+        <file>qmldir/EnduranceDirectoryPage.qml</file>
+        <file>qmldir/ControlPage.qml</file>
+        <file>qmldir/SnapshotIntervalDialog.qml</file>
+        <file>qmldir/HelpPage.qml</file>
+    </qresource>
+</RCC>

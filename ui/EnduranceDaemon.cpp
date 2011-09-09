@@ -1,0 +1,107 @@
+#include "EnduranceDaemon.h"
+
+EnduranceDaemon::EnduranceDaemon(QObject *parent)
+	: QObject(parent)
+	, _collectionFailed(false)
+	, _periodicCollectionActive(false)
+	, _takingSnapshot(false)
+	, _snapshotIntervalInMinutes(1)
+	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
+		QLatin1String("/"), QDBusConnection::sessionBus(), parent)
+{
+	connect(&_enduranceDaemon, SIGNAL(collectionFailedChanged(bool)),
+			this, SLOT(collectionFailedChangedSlot(bool)));
+	connect(&_enduranceDaemon, SIGNAL(periodicCollectionActiveChanged(bool)),
+			this, SLOT(periodicCollectionActiveChangedSlot(bool)));
+	connect(&_enduranceDaemon, SIGNAL(snapshotIntervalInMinutesChanged(int)),
+			this, SLOT(snapshotIntervalInMinutesChangedSlot(int)));
+	connect(&_enduranceDaemon, SIGNAL(takingSnapshotChanged(bool)),
+			this, SLOT(takingSnapshotChangedSlot(bool)));
+	connect(&_enduranceDaemon, SIGNAL(nextCollectionTimestampChanged(const QString&)),
+			this, SLOT(nextCollectionTimestampChangedSlot(const QString&)));
+	_collectionFailed = _enduranceDaemon.collectionFailed();
+	_periodicCollectionActive = _enduranceDaemon.periodicCollectionActive();
+	_takingSnapshot = _enduranceDaemon.takingSnapshot();
+	_snapshotIntervalInMinutes = _enduranceDaemon.snapshotIntervalInMinutes();
+	_nextCollectionTimestamp = _enduranceDaemon.nextCollectionTimestamp();
+}
+
+void EnduranceDaemon::collectionFailedChangedSlot(bool newValue)
+{
+	if (_collectionFailed == newValue)
+		return;
+	_collectionFailed = newValue;
+	emit collectionFailedChanged();
+}
+
+void EnduranceDaemon::periodicCollectionActiveChangedSlot(bool newValue)
+{
+	if (_periodicCollectionActive == newValue)
+		return;
+	_periodicCollectionActive = newValue;
+	emit periodicCollectionActiveChanged();
+}
+
+void EnduranceDaemon::snapshotIntervalInMinutesChangedSlot(int newValue)
+{
+	if (_snapshotIntervalInMinutes == newValue)
+		return;
+	_snapshotIntervalInMinutes = newValue;
+	emit snapshotIntervalInMinutesChanged();
+}
+
+void EnduranceDaemon::takingSnapshotChangedSlot(bool newValue)
+{
+	if (_takingSnapshot == newValue)
+		return;
+	_takingSnapshot = newValue;
+	emit takingSnapshotChanged();
+}
+
+void EnduranceDaemon::nextCollectionTimestampChangedSlot(const QString &newValue)
+{
+	if (_nextCollectionTimestamp == newValue)
+		return;
+	_nextCollectionTimestamp = newValue;
+	emit nextCollectionTimestampChanged();
+}
+
+bool EnduranceDaemon::collectionFailed() const
+{
+	return _collectionFailed;
+}
+
+bool EnduranceDaemon::periodicCollectionActive() const
+{
+	return _periodicCollectionActive;
+}
+
+void EnduranceDaemon::setPeriodicCollectionActive(bool value)
+{
+	_enduranceDaemon.setPeriodicCollectionActive(value);
+}
+
+int EnduranceDaemon::snapshotIntervalInMinutes() const
+{
+	return _snapshotIntervalInMinutes;
+}
+
+void EnduranceDaemon::setSnapshotIntervalInMinutes(int value)
+{
+	_enduranceDaemon.setSnapshotIntervalInMinutes(value);
+}
+
+QString EnduranceDaemon::nextCollectionTimestamp() const
+{
+	return _nextCollectionTimestamp;
+}
+
+bool EnduranceDaemon::takingSnapshot() const
+{
+	return _takingSnapshot;
+}
+
+void EnduranceDaemon::takeSnapshot()
+{
+	_enduranceDaemon.takeSnapshot();
+}

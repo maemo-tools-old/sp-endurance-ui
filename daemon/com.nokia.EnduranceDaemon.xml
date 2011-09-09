@@ -1,0 +1,32 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+	"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+	<interface name="com.nokia.EnduranceDaemon">
+		<property name="takingSnapshot" type="b" access="read"/>
+		<signal name="takingSnapshotChanged">
+			<arg type="b" direction="out"/>
+		</signal>
+
+		<property name="snapshotIntervalInMinutes" type="i" access="readwrite"/>
+		<signal name="snapshotIntervalInMinutesChanged">
+			<arg type="i" direction="out"/>
+		</signal>
+
+		<property name="periodicCollectionActive" type="b" access="readwrite"/>
+		<signal name="periodicCollectionActiveChanged">
+			<arg type="b" direction="out"/>
+		</signal>
+
+		<property name="nextCollectionTimestamp" type="s" access="read"/>
+		<signal name="nextCollectionTimestampChanged">
+			<arg type="s" direction="out"/>
+		</signal>
+
+		<property name="collectionFailed" type="b" access="read"/>
+		<signal name="collectionFailedChanged">
+			<arg type="b" direction="out"/>
+		</signal>
+
+		<method name="takeSnapshot"/>
+	</interface>
+</node>
