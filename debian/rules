@@ -1,0 +1,29 @@
+#!/usr/bin/make -f
+#export DH_VERBOSE=1
+
+#.PHONY: override_dh_strip
+.PHONY: override_dh_installcatalogs
+.PHONY: override_dh_installcron
+.PHONY: override_dh_installdebconf
+.PHONY: override_dh_installemacsen
+.PHONY: override_dh_installifupdown
+.PHONY: override_dh_installinfo
+.PHONY: override_dh_installinit
+.PHONY: override_dh_installmenu
+.PHONY: override_dh_installlogcheck
+.PHONY: override_dh_installlogrotate
+.PHONY: override_dh_installpam
+.PHONY: override_dh_installppp
+.PHONY: override_dh_installudev
+.PHONY: override_dh_installwm
+.PHONY: override_dh_installxfonts
+
+#override_dh_strip:
+	#dh_strip --dbg-package=sp-endurance-daemon-dbg
+
+override_dh_auto_build:
+	#./translations-generate.sh || exit 1
+	dh_auto_build
+
+%:
+	dh $@ --parallel

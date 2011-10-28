@@ -1,0 +1,25 @@
+Source: sp-endurance-ui
+Section: utils
+Priority: extra
+Maintainer: Tommi Rantala <tt.rantala@gmail.com>
+Build-Depends: debhelper (>= 7), libqt4-dev, applauncherd-dev, pkg-config
+Standards-Version: 3.9.1
+
+Package: sp-endurance-daemon
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: sp-endurance-daemon
+ ...
+
+Package: sp-endurance-ui
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt-components, applauncherd-invoker
+Description: UI for sp-endurance
+ ...
+
+#Package: sp-endurance-daemon-dbg
+#Section: debug
+#Architecture: any
+#Depends: ${misc:Depends}, cgroups-explorer (= ${binary:Version})
+#Description: debugging symbols for cgroups-explorer
+# Contains the debugging information for the cgroups-explorer package.
