@@ -11,18 +11,18 @@ int main(int argc, char **argv)
 	new EnduranceDaemonIfAdaptor(&daemon);
 	QDBusConnection connection = QDBusConnection::sessionBus();
 	if (!connection.isConnected()) {
-		fprintf(STDERR,
+		fprintf(stderr,
 			"EnduranceDaemon ERROR: DBus connection failed.\n");
 		return 1;
 	}
 	if (!connection.registerService("com.nokia.EnduranceDaemon")) {
-		fprintf(STDERR,
+		fprintf(stderr,
 			"EnduranceDaemon ERROR: unable to register DBus "
 			"service 'com.nokia.EnduranceDaemon'.\n");
 		return 1;
 	}
 	if (!connection.registerObject("/", &daemon)) {
-		fprintf(STDERR,
+		fprintf(stderr,
 			"EnduranceDaemon ERROR: unable to register root "
 			"object.\n");
 		return 1;
