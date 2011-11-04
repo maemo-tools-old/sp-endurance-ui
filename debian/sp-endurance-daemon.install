@@ -1,2 +1,4 @@
 /usr/sbin/*
 /usr/share/dbus-1/system-services/*
+/etc/init/*
+/etc/dbus-1/system.d/*

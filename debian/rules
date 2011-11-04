@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 #.PHONY: override_dh_strip
 .PHONY: override_dh_installcatalogs
@@ -18,11 +18,11 @@
 .PHONY: override_dh_installwm
 .PHONY: override_dh_installxfonts
 
-#override_dh_strip:
-	#dh_strip --dbg-package=sp-endurance-daemon-dbg
+override_dh_strip:
+	dh_strip --dbg-package=sp-endurance-daemon-dbg -Xsp-endurance-ui
+	dh_strip --dbg-package=sp-endurance-ui-dbg 
 
 override_dh_auto_build:
-	#./translations-generate.sh || exit 1
 	dh_auto_build
 
 %:
