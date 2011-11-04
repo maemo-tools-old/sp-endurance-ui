@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=com.nokia.EnduranceDaemon
 Exec=/usr/sbin/enduranced
+User=root

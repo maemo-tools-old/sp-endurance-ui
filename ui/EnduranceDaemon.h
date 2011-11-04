@@ -1,7 +1,7 @@
 #ifndef ENDURANCECONTROL_H
 #define ENDURANCECONTROL_H
 
-#include "EnduranceDaemonIf.h"
+#include "endurancedaemon_interface.h"
 #include <QObject>
 
 /* This is a proxy class for the DBus daemon. We cache the daemon state in

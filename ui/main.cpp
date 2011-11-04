@@ -1,5 +1,4 @@
 #include "EnduranceDaemon.h"
-#include "EnduranceDaemonIf.h"
 #include "EndurancePlotControl.h"
 #include "EnduranceReportControl.h"
 #include "EnduranceDirectoryModel.h"

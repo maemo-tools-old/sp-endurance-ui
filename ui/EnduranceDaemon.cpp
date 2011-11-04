@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "EnduranceDaemon.h"
 
 EnduranceDaemon::EnduranceDaemon(QObject *parent)
@@ -7,7 +8,7 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	, _takingSnapshot(false)
 	, _snapshotIntervalInMinutes(1)
 	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
-		QLatin1String("/"), QDBusConnection::sessionBus(), parent)
+		QLatin1String("/com/nokia/EnduranceDaemon"), QDBusConnection::systemBus(), parent)
 {
 	connect(&_enduranceDaemon, SIGNAL(collectionFailedChanged(bool)),
 			this, SLOT(collectionFailedChangedSlot(bool)));

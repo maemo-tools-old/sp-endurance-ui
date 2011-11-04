@@ -1,31 +1,34 @@
 #include "EnduranceDaemon.h"
-#include "EnduranceDaemonIfAdaptor.h"
+#include "endurancedaemon_adaptor.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <stdio.h>
+#include <syslog.h>
 
 int main(int argc, char **argv)
 {
 	QCoreApplication app(argc, argv);
 	EnduranceDaemon daemon;
-	new EnduranceDaemonIfAdaptor(&daemon);
-	QDBusConnection connection = QDBusConnection::sessionBus();
+	new EnduranceDaemonAdaptor(&daemon);
+	QDBusConnection connection = QDBusConnection::systemBus();
 	if (!connection.isConnected()) {
-		fprintf(stderr,
-			"EnduranceDaemon ERROR: DBus connection failed.\n");
+		syslog(LOG_ERR,
+			"EnduranceDaemon ERROR: DBus connection failed.");
 		return 1;
 	}
 	if (!connection.registerService("com.nokia.EnduranceDaemon")) {
-		fprintf(stderr,
+		syslog(LOG_ERR,
 			"EnduranceDaemon ERROR: unable to register DBus "
-			"service 'com.nokia.EnduranceDaemon'.\n");
+			"service 'com.nokia.EnduranceDaemon' (%s).", connection.lastError().message().toAscii().data());
 		return 1;
 	}
-	if (!connection.registerObject("/", &daemon)) {
-		fprintf(stderr,
+	if (!connection.registerObject("/com/nokia/EnduranceDaemon", &daemon)) {
+		syslog(LOG_ERR,
 			"EnduranceDaemon ERROR: unable to register root "
 			"object.\n");
 		return 1;
 	}
-	return app.exec();
+	int rc =  app.exec();
+	syslog(LOG_ERR, "exit");
+	return rc;
 }
