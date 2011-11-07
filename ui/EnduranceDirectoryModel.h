@@ -41,10 +41,11 @@ class EnduranceDirectoryModel : public QAbstractListModel
 	Q_OBJECT
 	Q_PROPERTY(bool clearing READ clearing NOTIFY clearingChanged)
 	Q_PROPERTY(int totalSizeMB READ totalSizeMB NOTIFY totalSizeMBChanged)
+	Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
 
 public:
 	EnduranceDirectoryModel(QObject *parent = 0);
-	int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	int rowCount(const QModelIndex &parent) const;
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
 	bool clearing() const { return _clearInProgress; }
@@ -53,11 +54,13 @@ public:
 
 public slots:
 	void clearEnduranceData();
+	int rowCount() const;
 	//bool rmdir(const QModelIndex &index) const;
 
 signals:
 	void clearingChanged();
 	void totalSizeMBChanged();
+	void rowCountChanged();
 
 private slots:
 	void slotRowsInserted(const QModelIndex &parent, int begin, int end);

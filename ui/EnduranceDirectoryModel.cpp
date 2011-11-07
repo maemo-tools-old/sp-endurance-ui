@@ -188,6 +188,7 @@ void EnduranceDirectoryModel::slotRowsInserted(const QModelIndex &parent, int st
 	}
 	kickDirInfoWatcher();
 	endInsertRows();
+	emit rowCountChanged();
 }
 
 void EnduranceDirectoryModel::kickDirInfoWatcher()
@@ -208,6 +209,7 @@ void EnduranceDirectoryModel::slotRowsRemoved(const QModelIndex &parent, int sta
 	Q_UNUSED(parent);
 	beginRemoveRows(QModelIndex(), start, end);
 	endRemoveRows();
+	emit rowCountChanged();
 }
 
 void EnduranceDirectoryModel::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
@@ -229,8 +231,12 @@ void EnduranceDirectoryModel::slotRowsAboutToBeRemoved(const QModelIndex &parent
 
 int EnduranceDirectoryModel::rowCount(const QModelIndex &parent) const
 {
-	qDebug() << Q_FUNC_INFO << parent;
 	Q_UNUSED(parent);
+	return rowCount();
+}
+
+int EnduranceDirectoryModel::rowCount() const
+{
 	int ret = _fsModel.rowCount(fsRootIndex());
 	qDebug() << Q_FUNC_INFO << ":" << ret;
 	return ret;
