@@ -22,7 +22,7 @@ target.path = $$PREFIX/sbin
 services.path = /usr/share/dbus-1/system-services
 services.files = com.nokia.EnduranceDaemon.service
 
-startup.path = /etc/init
+startup.path = /etc/init/apps
 startup.files = com.nokia.EnduranceDaemon.conf
 
 dbus.path = /etc/dbus-1/system.d
