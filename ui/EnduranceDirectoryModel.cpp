@@ -150,6 +150,8 @@ EnduranceDirectoryModel::EnduranceDirectoryModel(QObject *parent)
 	roles[SubtitleRole] = "subtitle";
 	setRoleNames(roles);
 
+	QDir().mkpath(SNAPSHOTDIR);
+
 	_fsModel.setReadOnly(false);
 	_fsModel.setRootPath(SNAPSHOTDIR);
 
