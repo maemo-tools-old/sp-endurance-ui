@@ -27,6 +27,7 @@ import "file:///usr/lib/qt4/imports/com/nokia/meego/UIConstants.js" as UI
 
 Column {
 	property variant reportControl
+	property EnduranceDirectoryModel enduranceDirectoryModel
 	property alias titleText: titleLabel.text
 	spacing: UI.PADDING_MEDIUM
 	Label {
@@ -45,7 +46,7 @@ Column {
 			width: logButton.width ?
 				parent.width/3 - (2*UI.BUTTON_SPACING)/3 :
 				parent.width/2 - (UI.BUTTON_SPACING/2)
-			enabled: !reportControl.generationInProgress //&& reportControl.enduranceDaemon.count >= 2
+			enabled: !reportControl.generationInProgress && enduranceDirectoryModel.rowCount >= 2
 			onClicked: reportControl.generate()
 			Behavior on width { NumberAnimation { easing.type: Easing.OutBounce } }
 		}

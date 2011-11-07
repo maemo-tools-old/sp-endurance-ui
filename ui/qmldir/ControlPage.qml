@@ -55,6 +55,7 @@ Page {
 			reportControl: EndurancePlotControl {
 				enduranceDirectoryModel: root.enduranceDirectoryModel
 			}
+			enduranceDirectoryModel: root.enduranceDirectoryModel
 		}
 
 		ReportingControl {
@@ -63,6 +64,7 @@ Page {
 			reportControl: EnduranceReportControl {
 				enduranceDirectoryModel: root.enduranceDirectoryModel
 			}
+			enduranceDirectoryModel: root.enduranceDirectoryModel
 		}
 
 		Label {
