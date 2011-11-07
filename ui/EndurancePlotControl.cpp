@@ -89,6 +89,7 @@ void EndurancePlotControl::runnerFinished(int exitCode, QProcess::ExitStatus exi
 			.arg(timeStamp);
 		goto error;
 	}
+	QDir().mkpath(REPORTDIR);
 	nukeDir(TMPDIR "e");
 	nukeDir(REPORTDIR "graphs");
 	QFile::remove(ENDURANCE_PLOT_HTML);

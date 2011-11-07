@@ -75,6 +75,7 @@ void EnduranceReportControl::runnerFinished(int exitCode, QProcess::ExitStatus e
 			.arg(timeStamp);
 		goto error;
 	}
+	QDir().mkpath(REPORTDIR);
 	QFile::remove(ENDURANCE_REPORT);
 	if (!QFile::rename(ENDURANCE_REPORT_TMP, ENDURANCE_REPORT)) {
 		logMsg = tr("<font color=\"red\">Failed to rename '%1' to '%2'.</font>\n")
