@@ -31,14 +31,12 @@ target.path = $$PREFIX/bin
 desktop.path = /usr/share/applications
 desktop.files = sp-endurance-ui.desktop
 
-#icon.path = $$PREFIX/share/icons
-#icon.files = 
+icon.path = $$PREFIX/share/icons
+icon.files = sp-endurance-ui.png
 
-INSTALLS += target desktop
+INSTALLS += target desktop icon
 QMAKE_CXXFLAGS += -fPIC
 QMAKE_LFLAGS += -pie -rdynamic
 LIBS += -lmdeclarativecache
 
 DISTCLEANFILES = Makefile
-
-
