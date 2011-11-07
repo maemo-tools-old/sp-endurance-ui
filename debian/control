@@ -1,7 +1,7 @@
 Source: sp-endurance-ui
 Section: utils
 Priority: extra
-Maintainer: Tommi Rantala <tt.rantala@gmail.com>
+Maintainer: Eero Tamminen <eero.tamminen@nokia.com>
 Build-Depends: debhelper (>= 7), libqt4-dev, applauncherd-dev, pkg-config
 Standards-Version: 3.9.1
 
