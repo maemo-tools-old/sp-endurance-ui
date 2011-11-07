@@ -18,7 +18,7 @@ Description: Endurance measurement daemon
 Package: sp-endurance-ui
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, qt-components, applauncherd-invoker,
- sp-endurance-daemon
+ zip, sp-endurance-postproc, sp-endurance-daemon
 Description: Endurance measurement daemon manager
  sp-endurance-ui provides user interface to interact with the endurance daemon
  provided by sp-endurance-daemon package.
@@ -36,5 +36,3 @@ Architecture: any
 Depends: ${misc:Depends}, sp-endurance-ui (= ${binary:Version})
 Description: debugging symbols for sp-endurance-ui package
  Contains the debugging information for the sp-endurance-ui package.
- 
- 
