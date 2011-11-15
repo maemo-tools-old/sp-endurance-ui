@@ -24,7 +24,7 @@ RESOURCES += qmlfiles.qrc
 DBUS_INTERFACES = ../daemon/com.nokia.EnduranceDaemon.xml
 
 QT += declarative dbus
-DEFINES += QT_NO_DEBUG_OUTPUT
+#DEFINES += QT_NO_DEBUG_OUTPUT
 
 target.path = $$PREFIX/bin
 
@@ -34,9 +34,14 @@ desktop.files = sp-endurance-ui.desktop
 icon.path = $$PREFIX/share/icons
 icon.files = sp-endurance-ui.png
 
-INSTALLS += target desktop icon
+event.path = $$PREFIX/share/meegotouch/notifications/eventtypes
+event.files = x-nokia.sp-endurance-ui.conf
+
+INSTALLS += target desktop icon event
 QMAKE_CXXFLAGS += -fPIC
 QMAKE_LFLAGS += -pie -rdynamic
 LIBS += -lmdeclarativecache
 
 DISTCLEANFILES = Makefile
+
+CONFIG += meegotouch

@@ -180,3 +180,14 @@ void EnduranceDaemon::snapshotterReadyRead()
 	_snapshotterLog.log(_snapshotter.readAllStandardOutput());
 	_snapshotterLog.log(_snapshotter.readAllStandardError());
 }
+
+bool EnduranceDaemon::tryShutdown()
+{
+	qDebug() << "Attempting to shutdown endurance daemon:" << _periodicCollectionActive;
+	if (_periodicCollectionActive) {
+		/* prevent from terminated if periodic snapshot collection is active */
+		return false;
+	}
+	emit shutdown();
+	return true;
+}

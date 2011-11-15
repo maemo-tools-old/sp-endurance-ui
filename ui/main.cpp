@@ -29,6 +29,7 @@
 #include <QtDeclarative>
 #include <QUrl>
 #include <applauncherd/MDeclarativeCache>
+#include <QDebug>
 
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
@@ -44,5 +45,10 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 	QDeclarativeView *window = MDeclarativeCache::qDeclarativeView();
 	window->setSource(QUrl("qrc:/qmldir/main.qml"));
 	window->showFullScreen();
-	return app->exec();
+	int rc = app->exec();
+
+	EnduranceDaemon ed;
+	ed.tryShutdown();
+
+	return rc;
 }

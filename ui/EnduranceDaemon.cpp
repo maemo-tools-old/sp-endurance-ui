@@ -21,6 +21,7 @@
  * 02110-1301 USA
  */
 #include <QDebug>
+#include <MNotification>
 #include "EnduranceDaemon.h"
 
 EnduranceDaemon::EnduranceDaemon(QObject *parent)
@@ -128,3 +129,15 @@ void EnduranceDaemon::takeSnapshot()
 {
 	_enduranceDaemon.takeSnapshot();
 }
+
+bool EnduranceDaemon::tryShutdown()
+{
+	bool stopped = _enduranceDaemon.tryShutdown();
+	if (!stopped) {
+		MNotification notification("x-nokia.sp-endurance-ui", "Endurance daemon",
+				"Periodic endurance data gathering is being continued in the background");
+		notification.publish();
+	}
+	return stopped;
+}
+

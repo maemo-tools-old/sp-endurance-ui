@@ -58,6 +58,7 @@ public:
 
 public slots:
 	void takeSnapshot();
+	bool tryShutdown();
 
 signals:
 	void collectionFailedChanged(bool);
@@ -65,6 +66,8 @@ signals:
 	void snapshotIntervalInMinutesChanged(int);
 	void takingSnapshotChanged(bool);
 	void nextCollectionTimestampChanged(QString);
+
+	void shutdown();
 
 private:
 	void setCollectionFailed(bool);

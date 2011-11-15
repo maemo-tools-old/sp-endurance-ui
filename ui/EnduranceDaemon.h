@@ -52,6 +52,7 @@ public slots:
 	void takeSnapshot();
 	void setSnapshotIntervalInMinutes(int);
 	void setPeriodicCollectionActive(bool);
+	bool tryShutdown();
 
 signals:
 	void collectionFailedChanged();

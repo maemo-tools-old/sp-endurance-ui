@@ -28,5 +28,10 @@
 		</signal>
 
 		<method name="takeSnapshot"/>
+
+		<method name="tryShutdown">
+			<arg name="success" type="b" direction="out"/>
+		</method>
+
 	</interface>
 </node>

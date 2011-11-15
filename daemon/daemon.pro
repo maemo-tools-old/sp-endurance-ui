@@ -32,4 +32,4 @@ INSTALLS += target services startup dbus
 
 DISTCLEANFILES = Makefile
 
-DEFINES += QT_NO_DEBUG_OUTPUT
+#DEFINES += QT_NO_DEBUG_OUTPUT
