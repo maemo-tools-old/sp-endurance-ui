@@ -26,7 +26,7 @@ override_dh_strip:
 	dh_strip --dbg-package=sp-endurance-ui-dbg 
 
 override_dh_auto_configure:
-	dh_auto_configure -- 'QMAKE_LFLAGS_RELEASE*=-Wl,--as-needed' 'USE_BOOSTER=1'
+	dh_auto_configure -- 'QMAKE_LFLAGS_RELEASE*=-Wl,--as-needed' 'USE_BOOSTER=1' 'DEFINES+=QT_NO_DEBUG_OUTPUT'
 
 %:
 	dh $@ --parallel
