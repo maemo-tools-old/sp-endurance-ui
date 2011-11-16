@@ -53,6 +53,10 @@ Page {
 				}
 			}
 			MenuItem {
+				text: qsTr("View last snapshot log")
+				onClicked: logSheet.open()
+			}
+			MenuItem {
 				text: qsTr("About")
 				onClicked: pageStack.push(helpPage)
 			}
@@ -111,4 +115,36 @@ Page {
 			enduranceArchiver.clearLog()
 		}
 	}
+	
+	Sheet {
+		id: logSheet
+		
+		EnduranceLogReader {
+			id: logReader
+		}
+		
+		rejectButtonText: qsTr("Close")
+	
+		onStatusChanged: {
+			if (status == DialogStatus.Opening) logReader.startMonitoring()
+			if (status == DialogStatus.Closed) logReader.stopMonitoring()
+		} 
+	
+		content: Flickable {
+			anchors.fill: parent
+			anchors.leftMargin: 10
+			anchors.topMargin: 10
+			contentWidth: logContent.width
+			contentHeight: logContent.height
+			flickableDirection: Flickable.VerticalFlick
+			Label {
+				id: logContent
+				text: logReader.log
+				textFormat: Text.RichText
+				width: mainpage.width - 16
+			}
+		}
+		
+	}
+	
 }

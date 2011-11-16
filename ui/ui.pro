@@ -10,7 +10,9 @@ HEADERS += \
 	EndurancePlotControl.h \
 	EnduranceReportControl.h \
 	EnduranceDirectoryModel.h \
-	EnduranceArchiver.h
+	EnduranceArchiver.h \
+	EnduranceLogReader.h
+	
 SOURCES += \
 	EnduranceDaemon.cpp \
 	EnduranceReportingBase.cpp \
@@ -18,7 +20,9 @@ SOURCES += \
 	EnduranceReportControl.cpp \
 	EnduranceDirectoryModel.cpp \
 	EnduranceArchiver.cpp \
+	EnduranceLogReader.cpp \
 	main.cpp
+	 
 RESOURCES += qmlfiles.qrc
 
 DBUS_INTERFACES = ../daemon/com.nokia.EnduranceDaemon.xml
