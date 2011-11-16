@@ -28,12 +28,26 @@
 #include <QApplication>
 #include <QtDeclarative>
 #include <QUrl>
-#include <applauncherd/MDeclarativeCache>
 #include <QDebug>
 
-Q_DECL_EXPORT int main(int argc, char **argv)
+#ifdef USE_BOOSTER
+#include <MDeclarativeCache>
+#define EXPORT_MAIN Q_DECL_EXPORT
+#else
+#define EXPORT_MAIN
+#endif
+
+EXPORT_MAIN int main(int argc, char **argv)
 {
-	QApplication *app = MDeclarativeCache::qApplication(argc, argv);
+	QApplication *app = NULL;
+	QDeclarativeView *window = NULL;
+#ifdef USE_BOOSTER
+	app = MDeclarativeCache::qApplication(argc, argv);
+	window = MDeclarativeCache::qDeclarativeView();
+#else
+	app = new QApplication(argc, argv);
+	window = new QDeclarativeView();
+#endif
 	app->setProperty("NoMStyle", true);
 	qmlRegisterType<EnduranceDaemon>("com.nokia.endurance", 1, 0, "EnduranceDaemon");
 	//qmlRegisterUncreatableType<EnduranceReportingBase>("com.nokia.endurance", 1, 0, "EnduranceReportingBase", "Create EndurancePlotControl or EnduranceReportControl instead.");
@@ -42,7 +56,6 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 	qmlRegisterType<EnduranceDirectoryModel>("com.nokia.endurance", 1, 0, "EnduranceDirectoryModel");
 	qmlRegisterType<EnduranceArchiver>("com.nokia.endurance", 1, 0, "EnduranceArchiver");
 	//QDir::setCurrent(app.applicationDirPath());
-	QDeclarativeView *window = MDeclarativeCache::qDeclarativeView();
 	window->setSource(QUrl("qrc:/qmldir/main.qml"));
 	window->showFullScreen();
 	int rc = app->exec();
