@@ -38,10 +38,13 @@ event.path = $$PREFIX/share/meegotouch/notifications/eventtypes
 event.files = x-nokia.sp-endurance-ui.conf
 
 INSTALLS += target desktop icon event
-QMAKE_CXXFLAGS += -fPIC
-QMAKE_LFLAGS += -pie -rdynamic
-LIBS += -lmdeclarativecache
 
 DISTCLEANFILES = Makefile
 
 CONFIG += meegotouch
+
+!$$USE_BOOSTER {
+	message("Building with booster enabled.")
+	CONFIG += qdeclarative-boostable
+	DEFINES += USE_BOOSTER
+}
