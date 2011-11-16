@@ -74,20 +74,20 @@ Column {
 			Behavior on width { NumberAnimation { easing.type: Easing.OutBounce} }
 		}
 	}
-// TODO: enable the progressbar if it's performance gets reasonable.
 	Item {
 		width: parent.width
 		height: 10
-	}
+
+// TODO: enable the progressbar if it's performance gets reasonable.
 /*
-	ProgressBar {
-		indeterminate: true
-		width: parent.width
-		// I want this to act as invisible padding when not visible.
-		opacity: Math.max(0.0000001, reportControl.generationInProgress)
-		Behavior on opacity { NumberAnimation { } }
-	}
+		ProgressBar {
+			indeterminate: true
+			width: parent.width
+			visible: reportControl.generationInProgress
+		}
 */
+	}
+
 	Sheet {
 		id: logSheet
 		acceptButtonText: qsTr("Clear")
