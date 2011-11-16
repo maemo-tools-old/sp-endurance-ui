@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
 export DH_VERBOSE=1
 
-#.PHONY: override_dh_strip
+.PHONY: override_dh_strip
+
+# Speed up packaging by skipping these steps:
 .PHONY: override_dh_installcatalogs
 .PHONY: override_dh_installcron
 .PHONY: override_dh_installdebconf
