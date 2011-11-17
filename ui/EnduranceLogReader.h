@@ -61,9 +61,6 @@ signals:
 
 private:
 	QFileSystemWatcher _watcher;
-
 };
-
-
 
 #endif /* ENDURANCELOGREADER_H_ */

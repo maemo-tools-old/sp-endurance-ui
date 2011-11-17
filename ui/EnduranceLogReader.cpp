@@ -36,13 +36,13 @@ EnduranceLogReader::EnduranceLogReader(QObject* parent)
 QString EnduranceLogReader::log() const
 {
 	QFile logfile(ENDURANCE_LOG_FILE);
-    if (!logfile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return "";
-    }
-    QString contents;
-    while (!logfile.atEnd()) {
-        contents += logfile.readLine() + "<br/>";
-    }
+	if (!logfile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		return "";
+	}
+	QString contents;
+	while (!logfile.atEnd()) {
+		contents += logfile.readLine() + "<br/>";
+	}
 	return contents;
 }
 
@@ -56,5 +56,3 @@ void EnduranceLogReader::stopMonitoring()
 {
 	_watcher.removePath(ENDURANCE_LOG_FILE);
 }
-
-
