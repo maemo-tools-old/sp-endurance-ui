@@ -2,4 +2,4 @@
 Type=Application
 Name=sp-endurance
 Icon=/usr/share/icons/sp-endurance-ui.png
-Exec=/usr/bin/invoker --single-instance --type=d /usr/bin/sp-endurance-ui
+Exec=/usr/bin/sp-endurance-ui

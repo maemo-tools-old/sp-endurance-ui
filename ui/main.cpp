@@ -33,6 +33,7 @@
 
 #ifdef USE_BOOSTER
 #include <MDeclarativeCache>
+#include <MNotification>
 #define EXPORT_MAIN Q_DECL_EXPORT
 #else
 #define EXPORT_MAIN
@@ -63,7 +64,17 @@ EXPORT_MAIN int main(int argc, char **argv)
 	int rc = app->exec();
 
 	EnduranceDaemon ed;
-	ed.tryShutdown();
+	bool stopped = ed.tryShutdown();
+
+#ifdef MAEMO6
+	if (!stopped) {
+		MNotification notification("x-nokia.sp-endurance-ui", "Endurance daemon",
+				"Periodic endurance data gathering is being continued in the background");
+		notification.publish();
+	}
+#endif
+
+	return stopped;
 
 	return rc;
 }
