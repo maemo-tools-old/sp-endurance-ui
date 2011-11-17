@@ -21,11 +21,11 @@
  * 02110-1301 USA
  */
 
-#include <QFile>
-#include <QDebug>
-
 #include "EnduranceLogReader.h"
 #include "EnduranceConstants.h"
+
+#include <QFile>
+#include <QDebug>
 
 EnduranceLogReader::EnduranceLogReader(QObject* parent)
 	: QObject(parent)
