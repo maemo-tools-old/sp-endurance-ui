@@ -20,9 +20,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
+#include "EnduranceDaemon.h"
 #include <QDebug>
 #include <MNotification>
-#include "EnduranceDaemon.h"
 
 EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	: QObject(parent)
