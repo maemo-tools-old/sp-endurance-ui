@@ -118,18 +118,18 @@ Page {
 	
 	Sheet {
 		id: logSheet
-		
+
 		EnduranceLogReader {
 			id: logReader
 		}
-		
+
 		rejectButtonText: qsTr("Close")
-	
+
 		onStatusChanged: {
 			if (status == DialogStatus.Opening) logReader.startMonitoring()
 			if (status == DialogStatus.Closed) logReader.stopMonitoring()
-		} 
-	
+		}
+
 		content: Flickable {
 			anchors.fill: parent
 			anchors.leftMargin: 10
@@ -144,7 +144,5 @@ Page {
 				width: mainpage.width - 16
 			}
 		}
-		
 	}
-	
 }
