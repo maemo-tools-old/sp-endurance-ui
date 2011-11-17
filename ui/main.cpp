@@ -68,8 +68,10 @@ EXPORT_MAIN int main(int argc, char **argv)
 
 #ifdef MAEMO6
 	if (!stopped) {
-		MNotification notification("x-nokia.sp-endurance-ui", "Endurance daemon",
-				"Periodic endurance data gathering is being continued in the background");
+		MNotification notification(
+			QLatin1String("x-nokia.sp-endurance-ui"),
+			QObject::tr("Endurance daemon"),
+			QObject::tr("Periodic endurance data collection continues in the background"));
 		notification.publish();
 	}
 #endif
