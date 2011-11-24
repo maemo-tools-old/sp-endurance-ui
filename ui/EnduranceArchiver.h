@@ -45,6 +45,10 @@ class EnduranceArchiver : public QObject
 			READ enduranceDirectoryModel
 			WRITE setEnduranceDirectoryModel
 			NOTIFY enduranceDirectoryModelChanged)
+	Q_PROPERTY(QString outputFilename
+			READ outputFilename
+			NOTIFY outputFilenameChanged)
+
 
 public:
 	EnduranceArchiver(QObject *parent = NULL);
@@ -53,6 +57,7 @@ public:
 	bool archiveInProgress() const { return _archiveInProgress; }
 	bool archiveError() const { return _archiveError; }
 	const QString &log() const { return _log; }
+	const QString& outputFilename() const { return _outputFilename; }
 
 public slots:
 	void archive();
@@ -64,6 +69,7 @@ signals:
 	void archiveErrorChanged();
 	void logChanged();
 	void enduranceDirectoryModelChanged();
+	void outputFilenameChanged();
 
 private slots:
 	void runnerFinished(int, QProcess::ExitStatus);
@@ -73,6 +79,7 @@ private slots:
 private:
 	void appendLog(const QByteArray &);
 	void setArchiveError(bool);
+	QString createArchiveName(const QString& prefix);
 
 private:
 	bool _archiveInProgress : 1;
@@ -80,6 +87,7 @@ private:
 	QProcess _runner;
 	QString _log;
 	EnduranceDirectoryModel *_enduranceDirectoryModel;
+	QString _outputFilename;
 };
 
 #endif /* ENDURANCECOMPRESSOR_H */

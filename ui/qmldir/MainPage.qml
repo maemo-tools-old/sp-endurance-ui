@@ -106,7 +106,7 @@ Page {
 			qsTr("Archiving...") :
 			enduranceArchiver.archiveError ?
 				qsTr("Error creating archive:<br/>%1").arg(enduranceArchiver.log) :
-				qsTr("Snapshot archive created:<br/><tt>MyDocs/Documents/sp-endurance.zip</tt>");
+				qsTr("Snapshot archive created:<br/><tt>MyDocs/Documents/" + enduranceArchiver.outputFilename + "</tt>");
 		onAccepted: {
 			enduranceArchiver.clearLog()
 		}

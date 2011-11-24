@@ -25,6 +25,7 @@
 #include "EnduranceDirectoryModel.h"
 #include <sys/types.h>
 #include <signal.h>
+#include <QDateTime>
 
 EnduranceArchiver::EnduranceArchiver(QObject *parent)
 	: QObject(parent)
@@ -54,14 +55,15 @@ void EnduranceArchiver::archive()
 		return;
 	}
 	setArchiveError(false);
-	QFile::remove("/home/user/MyDocs/Documents/sp-endurance.zip");
 	_archiveInProgress = true;
 	emit archiveInProgressChanged();
 	appendLog(tr("<font color=\"green\">Started.</font><br/>").toUtf8());
 	QStringList opts;
 	opts << "/usr/bin/zip";
 	opts << "-r";
-	opts << "/home/user/MyDocs/Documents/sp-endurance.zip";
+	_outputFilename = createArchiveName("sp-endurance-data");
+	emit outputFilenameChanged();
+	opts << QString("/home/user/MyDocs/Documents/").append(_outputFilename);
 	foreach(const QString &dir, dirList)
 		opts << (".endurance/" + dir);
 	_runner.start("/usr/bin/nice", opts, QIODevice::ReadOnly);
@@ -137,3 +139,13 @@ void EnduranceArchiver::setArchiveError(bool newValue)
 	_archiveError = newValue;
 	emit archiveErrorChanged();
 }
+
+
+QString EnduranceArchiver::createArchiveName(const QString& prefix)
+{
+	QString name(prefix);
+	name += QDateTime::currentDateTime().toString("_yyyy.MM.dd-hh.mm");
+	name += ".zip";
+	return name;
+}
+
