@@ -20,18 +20,39 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCECONSTANTS_H
-#define ENDURANCECONSTANTS_H
+#ifndef ARCHIVESOURCE_H_
+#define ARCHIVESOURCE_H_
 
-#define DATADIR "/home/user/MyDocs/.sp-endurance/"
-#define USERDIR "/home/user"
-#define REPORTDIR "/home/user/.sp-endurance/"
-#define TMPDIR "/var/tmp/"
-#define ENDURANCE_REPORT (REPORTDIR "endurance-report.html")
-#define ENDURANCE_REPORT_TMP (TMPDIR "endurance-report.html")
-#define ENDURANCE_PLOT_HTML (REPORTDIR "index.html")
-#define ENDURANCE_PLOT_HTML_TMP (TMPDIR "index.html")
+#include <QObject>
+#include <QStringList>
 
-#define ENDURANCE_LOG_FILE "/var/log/enduranced/snapshotter"
+/**
+ * The base source file/directory provider for the EnduranceArchiver.
+ */
+class ArchiveSource : public QObject {
+	Q_OBJECT
+public:
+	/**
+	 * The list of files/directories to archive.
+	 * @return
+	 */
+	virtual QStringList contents() const { return QStringList(); }
 
-#endif /* ENDURANCECONSTANTS_H */
+	/**
+	 * The archiver working directory.
+	 * @return
+	 */
+	virtual QString workDir() const { return ""; }
+
+	/**
+	 * The data directory relative to the working directory,
+	 * containing the files/directories returned by contents().
+	 * @return
+	 */
+	virtual QString dataDir() const { return ""; }
+
+};
+
+
+
+#endif /* DIRECTORYMODEL_H_ */

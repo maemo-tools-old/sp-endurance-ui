@@ -20,18 +20,31 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCECONSTANTS_H
-#define ENDURANCECONSTANTS_H
+#ifndef REPORTARCHIVESOURCE_H_
+#define REPORTARCHIVESOURCE_H_
 
-#define DATADIR "/home/user/MyDocs/.sp-endurance/"
-#define USERDIR "/home/user"
-#define REPORTDIR "/home/user/.sp-endurance/"
-#define TMPDIR "/var/tmp/"
-#define ENDURANCE_REPORT (REPORTDIR "endurance-report.html")
-#define ENDURANCE_REPORT_TMP (TMPDIR "endurance-report.html")
-#define ENDURANCE_PLOT_HTML (REPORTDIR "index.html")
-#define ENDURANCE_PLOT_HTML_TMP (TMPDIR "index.html")
+#include "EnduranceConstants.h"
+#include "ArchiveSource.h"
 
-#define ENDURANCE_LOG_FILE "/var/log/enduranced/snapshotter"
+#include <QDir>
 
-#endif /* ENDURANCECONSTANTS_H */
+/**
+ * The generated report archive source provider.
+ */
+class ReportArchiveSource : public ArchiveSource
+{
+	Q_OBJECT
+
+	virtual QStringList contents() const {
+		return QDir(REPORTDIR).entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+	}
+
+	QString dataDir() const { return ".sp-endurance"; }
+
+	QString workDir() const { return USERDIR; }
+
+};
+
+
+
+#endif /* REPORTARCHIVESOURCE_H_ */

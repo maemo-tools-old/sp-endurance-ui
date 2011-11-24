@@ -27,7 +27,7 @@
 #include <QProcess>
 #include <QByteArray>
 
-class EnduranceDirectoryModel;
+class ArchiveSource;
 
 class EnduranceArchiver : public QObject
 {
@@ -41,23 +41,31 @@ class EnduranceArchiver : public QObject
 	Q_PROPERTY(QString log
 			READ log
 			NOTIFY logChanged)
-	Q_PROPERTY(EnduranceDirectoryModel *enduranceDirectoryModel
-			READ enduranceDirectoryModel
-			WRITE setEnduranceDirectoryModel
-			NOTIFY enduranceDirectoryModelChanged)
+	Q_PROPERTY(ArchiveSource *source
+			READ source
+			WRITE setSource)
 	Q_PROPERTY(QString outputFilename
 			READ outputFilename
 			NOTIFY outputFilenameChanged)
-
+	Q_PROPERTY(QString outputPath
+			READ outputPath
+			WRITE setOutputPath)
+	Q_PROPERTY(QString outputTemplate
+			READ outputTemplate
+			WRITE setOutputTemplate)
 
 public:
 	EnduranceArchiver(QObject *parent = NULL);
-	EnduranceDirectoryModel *enduranceDirectoryModel() { return _enduranceDirectoryModel; }
-	void setEnduranceDirectoryModel(EnduranceDirectoryModel *);
+	ArchiveSource *source() { return _source; }
+	void setSource(ArchiveSource *source) { _source = source; }
 	bool archiveInProgress() const { return _archiveInProgress; }
 	bool archiveError() const { return _archiveError; }
 	const QString &log() const { return _log; }
-	const QString& outputFilename() const { return _outputFilename; }
+	const QString &outputFilename() const { return _outputFilename; }
+	const QString &outputPath() const { return _outputPath; }
+	void setOutputPath(const QString &path) { _outputPath = path; }
+	const QString &outputTemplate() const { return _outputTemplate; }
+	void setOutputTemplate(const QString &outputTemplate) { _outputTemplate = outputTemplate; }
 
 public slots:
 	void archive();
@@ -68,7 +76,6 @@ signals:
 	void archiveInProgressChanged();
 	void archiveErrorChanged();
 	void logChanged();
-	void enduranceDirectoryModelChanged();
 	void outputFilenameChanged();
 
 private slots:
@@ -86,8 +93,10 @@ private:
 	bool _archiveError : 1;
 	QProcess _runner;
 	QString _log;
-	EnduranceDirectoryModel *_enduranceDirectoryModel;
+	ArchiveSource *_source;
 	QString _outputFilename;
+	QString _outputPath;
+	QString _outputTemplate;
 };
 
 #endif /* ENDURANCECOMPRESSOR_H */

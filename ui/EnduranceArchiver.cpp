@@ -23,6 +23,8 @@
 #include "EnduranceConstants.h"
 #include "EnduranceArchiver.h"
 #include "EnduranceDirectoryModel.h"
+#include "ArchiveSource.h"
+
 #include <sys/types.h>
 #include <signal.h>
 #include <QDateTime>
@@ -31,9 +33,8 @@ EnduranceArchiver::EnduranceArchiver(QObject *parent)
 	: QObject(parent)
 	, _archiveInProgress(false)
 	, _archiveError(false)
-	, _enduranceDirectoryModel(NULL)
+	, _source(NULL)
 {
-	_runner.setWorkingDirectory(DATADIR);
 	connect(&_runner, SIGNAL(finished(int, QProcess::ExitStatus)),
 			SLOT(runnerFinished(int, QProcess::ExitStatus)));
 	connect(&_runner, SIGNAL(error(QProcess::ProcessError)),
@@ -46,12 +47,12 @@ EnduranceArchiver::EnduranceArchiver(QObject *parent)
 
 void EnduranceArchiver::archive()
 {
-	if (!_enduranceDirectoryModel)
+	if (!_source)
 		return;
-	QStringList dirList = _enduranceDirectoryModel->directoryList();
+	QStringList dirList = _source->contents();
 	if (dirList.isEmpty()) {
 		setArchiveError(true);
-		appendLog(tr("<font color=\"red\">No snapshots collected.</font>\n").toUtf8());
+		appendLog(tr("<font color=\"red\">No source data found.</font>\n").toUtf8());
 		return;
 	}
 	setArchiveError(false);
@@ -61,11 +62,13 @@ void EnduranceArchiver::archive()
 	QStringList opts;
 	opts << "/usr/bin/zip";
 	opts << "-r";
-	_outputFilename = createArchiveName("sp-endurance-data");
+	_outputFilename = createArchiveName(_outputTemplate);
 	emit outputFilenameChanged();
-	opts << QString("/home/user/MyDocs/Documents/").append(_outputFilename);
+	opts << _outputPath + _outputFilename;
 	foreach(const QString &dir, dirList)
-		opts << (".endurance/" + dir);
+		opts << (_source->dataDir() + "/" + dir);
+
+	_runner.setWorkingDirectory(_source->workDir());
 	_runner.start("/usr/bin/nice", opts, QIODevice::ReadOnly);
 }
 
@@ -116,12 +119,6 @@ void EnduranceArchiver::clearLog()
 	emit logChanged();
 }
 
-void EnduranceArchiver::setEnduranceDirectoryModel(EnduranceDirectoryModel *model)
-{
-	_enduranceDirectoryModel = model;
-	emit enduranceDirectoryModelChanged();
-}
-
 void EnduranceArchiver::abort()
 {
 	if (!_archiveInProgress)
@@ -141,7 +138,7 @@ void EnduranceArchiver::setArchiveError(bool newValue)
 }
 
 
-QString EnduranceArchiver::createArchiveName(const QString& prefix)
+QString EnduranceArchiver::createArchiveName(const QString &prefix)
 {
 	QString name(prefix);
 	name += QDateTime::currentDateTime().toString("_yyyy.MM.dd-hh.mm");

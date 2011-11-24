@@ -26,6 +26,8 @@
 #include "EnduranceDirectoryModel.h"
 #include "EnduranceArchiver.h"
 #include "EnduranceLogReader.h"
+#include "DataArchiveSource.h"
+#include "ReportArchiveSource.h"
 #include <QApplication>
 #include <QtDeclarative>
 #include <QUrl>
@@ -58,6 +60,9 @@ EXPORT_MAIN int main(int argc, char **argv)
 	qmlRegisterType<EnduranceDirectoryModel>("com.nokia.endurance", 1, 0, "EnduranceDirectoryModel");
 	qmlRegisterType<EnduranceArchiver>("com.nokia.endurance", 1, 0, "EnduranceArchiver");
 	qmlRegisterType<EnduranceLogReader>("com.nokia.endurance", 1, 0, "EnduranceLogReader");
+	qmlRegisterType<ArchiveSource>("com.nokia.endurance", 1, 0, "ArchiveSource");
+	qmlRegisterType<DataArchiveSource>("com.nokia.endurance", 1, 0, "DataArchiveSource");
+	qmlRegisterType<ReportArchiveSource>("com.nokia.endurance", 1, 0, "ReportArchiveSource");
 	//QDir::setCurrent(app.applicationDirPath());
 	window->setSource(QUrl("qrc:/qmldir/main.qml"));
 	window->showFullScreen();

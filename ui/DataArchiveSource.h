@@ -20,18 +20,41 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCECONSTANTS_H
-#define ENDURANCECONSTANTS_H
+#ifndef DATAARCHIVESOURCE_H_
+#define DATAARCHIVESOURCE_H_
 
-#define DATADIR "/home/user/MyDocs/.sp-endurance/"
-#define USERDIR "/home/user"
-#define REPORTDIR "/home/user/.sp-endurance/"
-#define TMPDIR "/var/tmp/"
-#define ENDURANCE_REPORT (REPORTDIR "endurance-report.html")
-#define ENDURANCE_REPORT_TMP (TMPDIR "endurance-report.html")
-#define ENDURANCE_PLOT_HTML (REPORTDIR "index.html")
-#define ENDURANCE_PLOT_HTML_TMP (TMPDIR "index.html")
+#include "EnduranceDirectoryModel.h"
+#include "ArchiveSource.h"
+#include "EnduranceConstants.h"
 
-#define ENDURANCE_LOG_FILE "/var/log/enduranced/snapshotter"
+#include <QObject>
 
-#endif /* ENDURANCECONSTANTS_H */
+/**
+ * The collected snapshot data archive source provider.
+ */
+class DataArchiveSource : public ArchiveSource
+{
+	Q_OBJECT
+
+	Q_PROPERTY(EnduranceDirectoryModel *model
+			READ model
+			WRITE setModel)
+
+public:
+	EnduranceDirectoryModel *model() { return _model; }
+	void setModel(EnduranceDirectoryModel *model) { _model = model; }
+
+	virtual QStringList contents() const {
+		if (!_model) return QStringList();
+		return _model->directoryList();
+	}
+
+	QString dataDir() const { return ".endurance"; }
+
+	QString workDir() const { return DATADIR; }
+
+private:
+	EnduranceDirectoryModel *_model;
+};
+
+#endif /* DATAARCHIVESOURCE_H_ */

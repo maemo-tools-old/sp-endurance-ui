@@ -33,11 +33,25 @@ Page {
 	EnduranceDirectoryModel {
 		id: dirModel
 	}
-	EnduranceArchiver {
-		id: enduranceArchiver
-		enduranceDirectoryModel: dirModel
+	DataArchiveSource {
+		id: dataArchiveSource
+		model: dirModel
 	}
-
+	ReportArchiveSource {
+		id: reportArchiveSource
+	}
+	EnduranceArchiver {
+		id: dataEnduranceArchiver
+		source: dataArchiveSource
+		outputPath: "/home/user/MyDocs/Documents/"
+		outputTemplate: "sp-endurance-data"
+	}
+	EnduranceArchiver {
+		id: reportEnduranceArchiver
+		source: reportArchiveSource
+		outputPath: "/home/user/MyDocs/Documents/"
+		outputTemplate: "sp-endurance-report"
+	}
 	Menu {
 		id: myMenu
 		MenuLayout {
@@ -48,8 +62,13 @@ Page {
 			MenuItem {
 				text: qsTr("Archive collected snapshots")
 				onClicked: {
-					archiveDialog.open()
-					enduranceArchiver.archive()
+					archiveDialog.process(dataEnduranceArchiver)
+				}
+			}
+			MenuItem {
+				text: qsTr("Archive generated reports")
+				onClicked: {
+					archiveDialog.process(reportEnduranceArchiver)
 				}
 			}
 			MenuItem {
@@ -100,20 +119,29 @@ Page {
 
 	QueryDialog {
 		id: archiveDialog
-		rejectButtonText: enduranceArchiver.archiveInProgress ? qsTr("Cancel") : qsTr("")
-		acceptButtonText: enduranceArchiver.archiveInProgress ? qsTr("") : qsTr("OK")
-		message: enduranceArchiver.archiveInProgress ?
+		rejectButtonText: _archiver.archiveInProgress ? qsTr("Cancel") : qsTr("")
+		acceptButtonText: _archiver.archiveInProgress ? qsTr("") : qsTr("OK")
+		message: _archiver.archiveInProgress ?
 			qsTr("Archiving...") :
-			enduranceArchiver.archiveError ?
-				qsTr("Error creating archive:<br/>%1").arg(enduranceArchiver.log) :
-				qsTr("Snapshot archive created:<br/><tt>MyDocs/Documents/" + enduranceArchiver.outputFilename + "</tt>");
+			_archiver.archiveError ?
+				qsTr("Error creating archive:<br/>%1").arg(_archiver.log) :
+				qsTr("Archive created:<br/><tt>MyDocs/Documents/" + _archiver.outputFilename + "</tt>");
 		onAccepted: {
-			enduranceArchiver.clearLog()
+			_archiver.clearLog()
 		}
 		onRejected: {
-			enduranceArchiver.abort()
-			enduranceArchiver.clearLog()
+			_archiver.abort()
+			_archiver.clearLog()
 		}
+
+		property EnduranceArchiver _archiver
+		
+		function process(archiver) {
+			_archiver = archiver
+			open()
+			_archiver.archive()
+		}
+
 	}
 	
 	Sheet {
