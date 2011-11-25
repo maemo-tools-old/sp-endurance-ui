@@ -23,7 +23,7 @@
 #include "EnduranceConstants.h"
 #include "EnduranceArchiver.h"
 #include "EnduranceDirectoryModel.h"
-#include "ArchiveSource.h"
+#include "ArchiverOptions.h"
 
 #include <sys/types.h>
 #include <signal.h>
@@ -33,7 +33,6 @@ EnduranceArchiver::EnduranceArchiver(QObject *parent)
 	: QObject(parent)
 	, _archiveInProgress(false)
 	, _archiveError(false)
-	, _source(NULL)
 {
 	connect(&_runner, SIGNAL(finished(int, QProcess::ExitStatus)),
 			SLOT(runnerFinished(int, QProcess::ExitStatus)));
@@ -45,11 +44,11 @@ EnduranceArchiver::EnduranceArchiver(QObject *parent)
 			SLOT(runnerReadyRead()));
 }
 
-void EnduranceArchiver::archive()
+void EnduranceArchiver::archive(ArchiverOptions *options)
 {
-	if (!_source)
+	if (!options)
 		return;
-	QStringList dirList = _source->contents();
+	QStringList dirList = options->contents();
 	if (dirList.isEmpty()) {
 		setArchiveError(true);
 		appendLog(tr("<font color=\"red\">No source data found.</font>\n").toUtf8());
@@ -62,13 +61,13 @@ void EnduranceArchiver::archive()
 	QStringList opts;
 	opts << "/usr/bin/zip";
 	opts << "-r";
-	_outputFilename = createArchiveName(_outputTemplate);
+	_outputFilename = createArchiveName(options->outputTemplate());
 	emit outputFilenameChanged();
-	opts << _outputPath + _outputFilename;
+	opts << options->outputPath() + _outputFilename;
 	foreach(const QString &dir, dirList)
-		opts << (_source->dataDir() + "/" + dir);
+		opts << (options->dataDir() + "/" + dir);
 
-	_runner.setWorkingDirectory(_source->workDir());
+	_runner.setWorkingDirectory(options->workDir());
 	_runner.start("/usr/bin/nice", opts, QIODevice::ReadOnly);
 }
 

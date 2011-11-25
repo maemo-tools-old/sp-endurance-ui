@@ -20,18 +20,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef REPORTARCHIVESOURCE_H_
-#define REPORTARCHIVESOURCE_H_
+#ifndef REPORTARCHIVER_OPTIONS_H_
+#define REPORTARCHIVER_OPTIONS_H_
 
 #include "EnduranceConstants.h"
-#include "ArchiveSource.h"
+#include "ArchiverOptions.h"
 
 #include <QDir>
 
 /**
  * The generated report archive source provider.
  */
-class ReportArchiveSource : public ArchiveSource
+class ReportArchiverOptions : public ArchiverOptions
 {
 	Q_OBJECT
 
@@ -43,6 +43,7 @@ class ReportArchiveSource : public ArchiveSource
 
 	QString workDir() const { return USERDIR; }
 
+	virtual QString outputTemplate() const { return "sp-endurance-report"; }
 };
 
 

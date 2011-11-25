@@ -12,9 +12,9 @@ HEADERS += \
 	EnduranceDirectoryModel.h \
 	EnduranceArchiver.h \
 	EnduranceLogReader.h \
-	ArchiveSource.h \
-	DataArchiveSource.h \
-	ReportArchiveSource.h
+	ArchiverOptions.h \
+	DataArchiverOptions.h \
+	ReportArchiverOptions.h
 	
 SOURCES += \
 	EnduranceDaemon.cpp \

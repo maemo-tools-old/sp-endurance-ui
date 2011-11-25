@@ -20,41 +20,44 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef DATAARCHIVESOURCE_H_
-#define DATAARCHIVESOURCE_H_
+#ifndef ARCHIVER_OPTIONS_H_
+#define ARCHIVER_OPTIONS_H_
 
-#include "EnduranceDirectoryModel.h"
-#include "ArchiveSource.h"
-#include "EnduranceConstants.h"
+#include"EnduranceConstants.h"
 
 #include <QObject>
+#include <QStringList>
 
 /**
- * The collected snapshot data archive source provider.
+ * The base source file/directory provider for the EnduranceArchiver.
  */
-class DataArchiveSource : public ArchiveSource
-{
+class ArchiverOptions : public QObject {
 	Q_OBJECT
-
-	Q_PROPERTY(EnduranceDirectoryModel *model
-			READ model
-			WRITE setModel)
-
 public:
-	EnduranceDirectoryModel *model() { return _model; }
-	void setModel(EnduranceDirectoryModel *model) { _model = model; }
+	/**
+	 * The list of files/directories to archive.
+	 * @return
+	 */
+	virtual QStringList contents() const { return QStringList(); }
 
-	virtual QStringList contents() const {
-		if (!_model) return QStringList();
-		return _model->directoryList();
-	}
+	/**
+	 * The archiver working directory.
+	 * @return
+	 */
+	virtual QString workDir() const { return ""; }
 
-	QString dataDir() const { return ".endurance"; }
+	/**
+	 * The data directory relative to the working directory,
+	 * containing the files/directories returned by contents().
+	 * @return
+	 */
+	virtual QString dataDir() const { return ""; }
 
-	QString workDir() const { return DATADIR; }
+	virtual QString outputTemplate() const { return ""; }
 
-private:
-	EnduranceDirectoryModel *_model;
+	virtual QString outputPath() const { return ARCHIVEDIR; }
 };
 
-#endif /* DATAARCHIVESOURCE_H_ */
+
+
+#endif /* DIRECTORYMODEL_H_ */

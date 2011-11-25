@@ -24,9 +24,10 @@
 #define ENDURANCECONSTANTS_H
 
 #define DATADIR "/home/user/MyDocs/.sp-endurance/"
-#define USERDIR "/home/user"
+#define USERDIR "/home/user/"
 #define REPORTDIR "/home/user/.sp-endurance/"
 #define TMPDIR "/var/tmp/"
+#define ARCHIVEDIR (USERDIR "/MyDocs/Documents/")
 #define ENDURANCE_REPORT (REPORTDIR "endurance-report.html")
 #define ENDURANCE_REPORT_TMP (TMPDIR "endurance-report.html")
 #define ENDURANCE_PLOT_HTML (REPORTDIR "index.html")

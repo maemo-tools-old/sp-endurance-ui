@@ -27,7 +27,7 @@
 #include <QProcess>
 #include <QByteArray>
 
-class ArchiveSource;
+class ArchiverOptions;
 
 class EnduranceArchiver : public QObject
 {
@@ -41,34 +41,19 @@ class EnduranceArchiver : public QObject
 	Q_PROPERTY(QString log
 			READ log
 			NOTIFY logChanged)
-	Q_PROPERTY(ArchiveSource *source
-			READ source
-			WRITE setSource)
 	Q_PROPERTY(QString outputFilename
 			READ outputFilename
 			NOTIFY outputFilenameChanged)
-	Q_PROPERTY(QString outputPath
-			READ outputPath
-			WRITE setOutputPath)
-	Q_PROPERTY(QString outputTemplate
-			READ outputTemplate
-			WRITE setOutputTemplate)
 
 public:
 	EnduranceArchiver(QObject *parent = NULL);
-	ArchiveSource *source() { return _source; }
-	void setSource(ArchiveSource *source) { _source = source; }
 	bool archiveInProgress() const { return _archiveInProgress; }
 	bool archiveError() const { return _archiveError; }
 	const QString &log() const { return _log; }
 	const QString &outputFilename() const { return _outputFilename; }
-	const QString &outputPath() const { return _outputPath; }
-	void setOutputPath(const QString &path) { _outputPath = path; }
-	const QString &outputTemplate() const { return _outputTemplate; }
-	void setOutputTemplate(const QString &outputTemplate) { _outputTemplate = outputTemplate; }
 
 public slots:
-	void archive();
+	void archive(ArchiverOptions *);
 	void clearLog();
 	void abort();
 
@@ -93,10 +78,7 @@ private:
 	bool _archiveError : 1;
 	QProcess _runner;
 	QString _log;
-	ArchiveSource *_source;
 	QString _outputFilename;
-	QString _outputPath;
-	QString _outputTemplate;
 };
 
 #endif /* ENDURANCECOMPRESSOR_H */
