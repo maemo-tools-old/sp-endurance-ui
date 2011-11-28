@@ -77,6 +77,7 @@ Page {
 			width: parent.width
 			onClicked: enduranceDaemon.setPeriodicCollectionActive(
 				!enduranceDaemon.periodicCollectionActive)
+			enabled: enduranceDaemon.valid
 		}
 		Row {
 			width: parent.width
@@ -88,6 +89,7 @@ Page {
 					qsTr("Interval: %1min").arg(enduranceDaemon.snapshotIntervalInMinutes)
 				onClicked: intervalSelectionDialog.open()
 				width: (2 * parent.width / 3) - 2
+				enabled: enduranceDaemon.valid
 			}
 			ButtonRow {
 				width: (parent.width / 3) - 2
@@ -100,6 +102,7 @@ Page {
 							enduranceDaemon.setSnapshotIntervalInMinutes(
 								Math.floor(enduranceDaemon.snapshotIntervalInMinutes/60))
 					}
+					enabled: enduranceDaemon.valid
 				}
 				Button {
 					id: intervalHours
@@ -109,6 +112,7 @@ Page {
 							enduranceDaemon.setSnapshotIntervalInMinutes(
 								enduranceDaemon.snapshotIntervalInMinutes*60)
 					}
+					enabled: enduranceDaemon.valid
 				}
 			}
 		}
@@ -122,7 +126,7 @@ Page {
 			text: qsTr("Take one snapshot now")
 			width: parent.width
 			onClicked: enduranceDaemon.takeSnapshot()
-			enabled: !enduranceDaemon.takingSnapshot
+			enabled: enduranceDaemon.valid && !enduranceDaemon.takingSnapshot
 		}
 		Item { width: parent.width; height: 10 }
 

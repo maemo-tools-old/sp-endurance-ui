@@ -48,6 +48,12 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	_takingSnapshot = _enduranceDaemon.takingSnapshot();
 	_snapshotIntervalInMinutes = _enduranceDaemon.snapshotIntervalInMinutes();
 	_nextCollectionTimestamp = _enduranceDaemon.nextCollectionTimestamp();
+
+	 connect(QDBusConnection::systemBus().interface(),
+	           SIGNAL(serviceOwnerChanged(QString,QString,QString)),
+	           this,SLOT(serviceOwnerChanged(QString,QString,QString)));
+
+	 _valid = _enduranceDaemon.isValid();
 }
 
 void EnduranceDaemon::collectionFailedChangedSlot(bool newValue)
@@ -135,3 +141,22 @@ bool EnduranceDaemon::tryShutdown()
 	return  _enduranceDaemon.tryShutdown();
 }
 
+bool EnduranceDaemon::valid()
+{
+	return _valid;
+}
+
+void EnduranceDaemon::serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
+{
+	Q_UNUSED(oldOwner);
+	Q_UNUSED(newOwner);
+	if (name == "com.nokia.EnduranceDaemon") {
+		if (newOwner.isEmpty()) {
+			emit terminated();
+		}
+		else if (!_valid) {
+			_valid = true;
+			emit validChanged();
+		}
+	}
+}

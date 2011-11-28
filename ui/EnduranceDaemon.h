@@ -38,6 +38,7 @@ class EnduranceDaemon : public QObject
 	Q_PROPERTY(int snapshotIntervalInMinutes READ snapshotIntervalInMinutes WRITE setSnapshotIntervalInMinutes NOTIFY snapshotIntervalInMinutesChanged)
 	Q_PROPERTY(bool takingSnapshot READ takingSnapshot NOTIFY takingSnapshotChanged)
 	Q_PROPERTY(QString nextCollectionTimestamp READ nextCollectionTimestamp NOTIFY nextCollectionTimestampChanged)
+	Q_PROPERTY(bool valid READ valid NOTIFY validChanged);
 
 public:
 	EnduranceDaemon(QObject *parent = 0);
@@ -53,6 +54,9 @@ public slots:
 	void setSnapshotIntervalInMinutes(int);
 	void setPeriodicCollectionActive(bool);
 	bool tryShutdown();
+	bool valid();
+	void serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
+
 
 signals:
 	void collectionFailedChanged();
@@ -60,6 +64,8 @@ signals:
 	void snapshotIntervalInMinutesChanged();
 	void takingSnapshotChanged();
 	void nextCollectionTimestampChanged();
+	void validChanged();
+	void terminated();
 
 private slots:
 	void collectionFailedChangedSlot(bool);
@@ -73,6 +79,7 @@ private:
 	bool _periodicCollectionActive : 1;
 	bool _takingSnapshot : 1;
 	int _snapshotIntervalInMinutes;
+	bool _valid;
 	QString _nextCollectionTimestamp;
 	com::nokia::EnduranceDaemon _enduranceDaemon;
 };

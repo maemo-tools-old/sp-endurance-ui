@@ -29,6 +29,10 @@ Page {
 	id: mainpage
 	EnduranceDaemon {
 		id: ed
+
+		onTerminated: {
+			daemonErrorMessage.open()
+		}
 	}
 	EnduranceDirectoryModel {
 		id: dirModel
@@ -156,5 +160,11 @@ Page {
 				width: mainpage.width - 16
 			}
 		}
+	}
+
+	QueryDialog {
+		id: daemonErrorMessage
+		message: qsTr("The endurance daemon terminated unexpectedly")
+		acceptButtonText: qsTr("Ok")
 	}
 }
