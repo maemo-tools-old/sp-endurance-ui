@@ -32,6 +32,7 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	, _snapshotIntervalInMinutes(1)
 	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
 		QLatin1String("/com/nokia/EnduranceDaemon"), QDBusConnection::systemBus(), parent)
+	, _serviceWatcher(0)
 {
 	connect(&_enduranceDaemon, SIGNAL(collectionFailedChanged(bool)),
 			this, SLOT(collectionFailedChangedSlot(bool)));
@@ -49,11 +50,14 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	_snapshotIntervalInMinutes = _enduranceDaemon.snapshotIntervalInMinutes();
 	_nextCollectionTimestamp = _enduranceDaemon.nextCollectionTimestamp();
 
-	 connect(QDBusConnection::systemBus().interface(),
-	           SIGNAL(serviceOwnerChanged(QString,QString,QString)),
-	           this,SLOT(serviceOwnerChanged(QString,QString,QString)));
-
 	 _valid = _enduranceDaemon.isValid();
+
+	 _serviceWatcher = new QDBusServiceWatcher("com.nokia.EnduranceDaemon", QDBusConnection::systemBus(),
+			 QDBusServiceWatcher::WatchForOwnerChange, this);
+	 connect(_serviceWatcher, SIGNAL(serviceUnregistered(const QString &)),
+			 this, SLOT(serviceUnregistered(const QString&)));
+	 connect(_serviceWatcher, SIGNAL(serviceRegistered(const QString &)),
+			 this, SLOT(serviceRegistered(const QString&)));
 }
 
 void EnduranceDaemon::collectionFailedChangedSlot(bool newValue)
@@ -146,17 +150,18 @@ bool EnduranceDaemon::valid()
 	return _valid;
 }
 
-void EnduranceDaemon::serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
+
+void EnduranceDaemon::serviceRegistered(const QString &name)
 {
-	Q_UNUSED(oldOwner);
-	Q_UNUSED(newOwner);
-	if (name == "com.nokia.EnduranceDaemon") {
-		if (newOwner.isEmpty()) {
-			emit terminated();
-		}
-		else if (!_valid) {
-			_valid = true;
-			emit validChanged();
-		}
+	Q_UNUSED(name);
+	if (!_valid) {
+		_valid = true;
+		emit validChanged();
 	}
+}
+
+void EnduranceDaemon::serviceUnregistered(const QString &name)
+{
+	Q_UNUSED(name);
+	emit terminated();
 }

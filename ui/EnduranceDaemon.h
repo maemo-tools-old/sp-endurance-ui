@@ -25,6 +25,7 @@
 
 #include "endurancedaemon_interface.h"
 #include <QObject>
+#include <QDBusServiceWatcher>
 
 /* This is a proxy class for the DBus daemon. We cache the daemon state in
  * order to avoid unnecessary dbus traffic.
@@ -55,8 +56,8 @@ public slots:
 	void setPeriodicCollectionActive(bool);
 	bool tryShutdown();
 	bool valid();
-	void serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
-
+	void serviceRegistered(const QString &);
+	void serviceUnregistered(const QString &);
 
 signals:
 	void collectionFailedChanged();
@@ -82,6 +83,7 @@ private:
 	bool _valid;
 	QString _nextCollectionTimestamp;
 	com::nokia::EnduranceDaemon _enduranceDaemon;
+	QDBusServiceWatcher *_serviceWatcher;
 };
 
 #endif /* ENDURANCECONTROL_H */
