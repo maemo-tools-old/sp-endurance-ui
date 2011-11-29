@@ -31,5 +31,6 @@
         <file>qmldir/ControlPage.qml</file>
         <file>qmldir/SnapshotIntervalDialog.qml</file>
         <file>qmldir/HelpPage.qml</file>
+        <file>qmldir/ReportPage.qml</file>
     </qresource>
 </RCC>

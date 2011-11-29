@@ -29,6 +29,8 @@ Column {
 	property variant reportControl
 	property EnduranceDirectoryModel enduranceDirectoryModel
 	property alias titleText: titleLabel.text
+	property Slider firstSnapshot
+	property Slider nextSnapshot
 	spacing: UI.PADDING_MEDIUM
 	Label {
 		id: titleLabel
@@ -47,7 +49,8 @@ Column {
 				parent.width/3 - (2*UI.BUTTON_SPACING)/3 :
 				parent.width/2 - (UI.BUTTON_SPACING/2)
 			enabled: !reportControl.generationInProgress && enduranceDirectoryModel.rowCount >= 2
-			onClicked: reportControl.generate()
+			onClicked: reportControl.generate(firstSnapshot.value, nextSnapshot.value == nextSnapshot.maximumValue ?
+					enduranceDirectoryModel.rowCount : nextSnapshot.value)
 			Behavior on width { NumberAnimation { easing.type: Easing.OutBounce } }
 		}
 		Button {

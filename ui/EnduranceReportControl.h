@@ -34,7 +34,7 @@ public:
 	EnduranceReportControl(QObject *parent = 0);
 
 public slots:
-	void generate();
+	void generate(int first, int next);
 	void open();
 
 private slots:

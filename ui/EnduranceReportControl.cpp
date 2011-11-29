@@ -42,7 +42,7 @@ EnduranceReportControl::EnduranceReportControl(QObject *parent)
 	}
 }
 
-void EnduranceReportControl::generate()
+void EnduranceReportControl::generate(int first, int next)
 {
 	if (!_enduranceDirectoryModel)
 		return;
@@ -58,8 +58,10 @@ void EnduranceReportControl::generate()
 	_runner.setStandardOutputFile(ENDURANCE_REPORT_TMP);
 	QStringList opts;
 	opts << "/usr/bin/endurance_report.py";
-	foreach(const QString &dir, dirList)
-		opts << (DATADIR ".endurance/" + dir);
+	for (int i = first - 1; i < dirList.size() - 1; i += next) {
+		opts << (DATADIR ".endurance/" + dirList[i]);
+	}
+	opts << (DATADIR ".endurance/" + dirList[dirList.size() - 1]);
 	_runner.start("/usr/bin/nice", opts, QIODevice::ReadOnly);
 }
 

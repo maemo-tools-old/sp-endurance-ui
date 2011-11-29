@@ -45,7 +45,7 @@ EndurancePlotControl::EndurancePlotControl(QObject *parent)
 	}
 }
 
-void EndurancePlotControl::generate()
+void EndurancePlotControl::generate(int first, int next)
 {
 	if (!_enduranceDirectoryModel)
 		return;
@@ -60,8 +60,10 @@ void EndurancePlotControl::generate()
 			.arg(QDateTime::currentDateTime().toString()).toAscii());
 	QStringList opts;
 	opts << "/usr/bin/endurance_plot";
-	foreach(const QString &dir, dirList)
-		opts << (DATADIR ".endurance/" + dir);
+	for (int i = first - 1; i < dirList.size() - 1; i += next) {
+		opts << (DATADIR ".endurance/" + dirList[i]);
+	}
+	opts << (DATADIR ".endurance/" + dirList[dirList.size() - 1]);
 	_runner.start("/usr/bin/nice", opts, QIODevice::ReadOnly);
 }
 

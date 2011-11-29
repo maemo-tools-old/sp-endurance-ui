@@ -61,7 +61,7 @@ public:
 
 public slots:
 	void clearLog();
-	virtual void generate() = 0;
+	virtual void generate(int first, int next) = 0;
 	virtual void open() = 0;
 
 signals:

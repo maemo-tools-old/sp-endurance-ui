@@ -29,7 +29,6 @@ import "file:///usr/lib/qt4/imports/com/nokia/meego/UIConstants.js" as UI
 Page {
 	id: root
 	property EnduranceDaemon enduranceDaemon
-	property EnduranceDirectoryModel enduranceDirectoryModel
 	anchors.margins: UI.DEFAULT_MARGIN
 
 	Header {
@@ -48,24 +47,6 @@ Page {
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
 		spacing: 6
-
-		ReportingControl {
-			width: parent.width
-			titleText: qsTr("Endurance Plot")
-			reportControl: EndurancePlotControl {
-				enduranceDirectoryModel: root.enduranceDirectoryModel
-			}
-			enduranceDirectoryModel: root.enduranceDirectoryModel
-		}
-
-		ReportingControl {
-			width: parent.width
-			titleText: qsTr("Endurance Report")
-			reportControl: EnduranceReportControl {
-				enduranceDirectoryModel: root.enduranceDirectoryModel
-			}
-			enduranceDirectoryModel: root.enduranceDirectoryModel
-		}
 
 		Label {
 			text: "<h3>Periodic snapshotting:</h3>"
@@ -116,8 +97,8 @@ Page {
 				}
 			}
 		}
-		Item { width: parent.width; height: 10 }
-
+		Item { width: parent.width; height: 20 }
+		
 		Label {
 			text: "<h3>Manual snapshotting:</h3>"
 			width: parent.width
@@ -128,7 +109,7 @@ Page {
 			onClicked: enduranceDaemon.takeSnapshot()
 			enabled: enduranceDaemon.valid && !enduranceDaemon.takingSnapshot
 		}
-		Item { width: parent.width; height: 10 }
+		Item { width: parent.width; height: 20 }
 
 		Label {
 			text: "<h3>Snapshotting status:</h3>"

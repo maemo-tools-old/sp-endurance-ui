@@ -87,7 +87,11 @@ Page {
 				tab: controlPage
 			}
 			TabButton {
-				text: qsTr("Collected data")
+				text: qsTr("Report")
+				tab: reportPage
+			}
+			TabButton {
+				text: qsTr("Data")
 				tab: dirPage
 			}
 		}
@@ -102,6 +106,9 @@ Page {
 		ControlPage {
 			id: controlPage
 			enduranceDaemon: ed
+		}
+		ReportPage {
+			id: reportPage
 			enduranceDirectoryModel: dirModel
 		}
 		EnduranceDirectoryPage {
