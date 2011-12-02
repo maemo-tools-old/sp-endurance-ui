@@ -63,7 +63,7 @@ Page {
 		Slider {
 			id: firstSnapshot
 			minimumValue: 1
-			maximumValue: 10
+			maximumValue: enduranceDirectoryModel.rowCount < 2 ? 1 : enduranceDirectoryModel.rowCount - 1
 			value: 1
 			stepSize: 1
 			valueIndicatorVisible: true
