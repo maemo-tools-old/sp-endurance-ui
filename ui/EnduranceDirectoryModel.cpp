@@ -256,13 +256,8 @@ QStringList EnduranceDirectoryModel::directoryList() const
 {
 	qDebug() << Q_FUNC_INFO;
 	QStringList result;
-	int rows = rowCount();
-	for (int row=0; row < rows; ++row) {
-		QVariant rowData = data(index(row), TitleRole);
-		QString entry = rowData.toString();
-		if (!entry.isEmpty())
-			result << entry;
-	}
+	foreach (QSharedPointer<DirectoryInfo> dirInfo, _directories)
+		result << dirInfo->dirname;
 	return result;
 }
 
