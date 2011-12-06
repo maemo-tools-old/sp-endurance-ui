@@ -24,16 +24,23 @@
 #define ENDURANCEDIRECTORYMODEL_H
 
 #include <QObject>
-#include <QFileSystemModel>
 #include <QFutureWatcher>
-#include <QHash>
+#include <QFileSystemWatcher>
+#include <QVector>
+#include <QAbstractListModel>
+#include <QSharedPointer>
+
 
 struct DirectoryInfo
 {
-	DirectoryInfo() : dirsize(0) {}
+	DirectoryInfo(const QString &name = "") : dirname(name), dirsize(0) {}
 	QString dirname;
 	QString date;
 	quint64 dirsize;
+
+	bool isEmpty() const {
+		return dirsize == 0;
+	}
 };
 
 class EnduranceDirectoryModel : public QAbstractListModel
@@ -55,7 +62,6 @@ public:
 public slots:
 	void clearEnduranceData();
 	int rowCount() const;
-	//bool rmdir(const QModelIndex &index) const;
 
 signals:
 	void clearingChanged();
@@ -63,24 +69,31 @@ signals:
 	void rowCountChanged();
 
 private slots:
-	void slotRowsInserted(const QModelIndex &parent, int begin, int end);
-	void slotRowsRemoved(const QModelIndex &parent, int begin, int end);
-	void slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-	void slotDirInfoResultsReadyAt(int beginIndex, int endIndex);
+	void dirInfoFinished();
 	void clearFinished();
+	/**
+	 * Updates snapshot directory model.
+	 *
+	 * This function is called whenever changes in endurance data
+	 * directory are detected. The endurance model is updated to
+	 * reflect the file system changes (directories added/removed).
+	 * @param path
+	 */
+	void slotDirectoryChanged(const QString &path);
 
 private:
-	QModelIndex fsRootIndex() const;
 	void kickDirInfoWatcher();
+	void insertDir(int index, const QString &dirName);
+	void removeDir(int index);
 
 private:
 	bool _clearInProgress;
 	bool _dirInfoWatcherBusy;
-	QFutureWatcher<DirectoryInfo> _dirInfoWatcher;
-	QList<QString> _dirInfoQueue;
+	QFutureWatcher<void> _dirInfoWatcher;
+	QList<QSharedPointer<DirectoryInfo> > _dirInfoQueue;
 	QFutureWatcher<void> _clearWatcher;
-	QHash<QString, DirectoryInfo> _directories;
-	QFileSystemModel _fsModel;
+	QVector<QSharedPointer<DirectoryInfo> > _directories;
+	QFileSystemWatcher _fsWatcher;
 };
 
 #endif /* ENDURANCEDIRECTORYMODEL_H */

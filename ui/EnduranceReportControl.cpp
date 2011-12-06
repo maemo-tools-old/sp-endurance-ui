@@ -26,6 +26,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QFile>
+#include <QDir>
 
 static bool
 checkEnduranceReport()

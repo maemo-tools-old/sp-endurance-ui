@@ -81,11 +81,10 @@ snapshotDirectoryDate(QString dirname)
 	return ret;
 }
 
-static DirectoryInfo
-directoryInfoFor(QString dirname)
+static void
+directoryInfoFor(QSharedPointer<DirectoryInfo> dirInfo)
 {
-	qDebug() << Q_FUNC_INFO << ":" << dirname;
-	DirectoryInfo dirInfo;
+	qDebug() << Q_FUNC_INFO << ":" << dirInfo->dirname;
 
 	/* We get notifications at the moment a new endurance directory is
 	 * created, and while save-incremental-endurance-stats is still
@@ -94,20 +93,17 @@ directoryInfoFor(QString dirname)
 	 */
 	for (int i=0; i < 10; ++i) {
 		struct stat statbuf;
-		if (stat((SNAPSHOTDIR+dirname).toUtf8(), &statbuf) == -1)
-			goto ok;
+		if (stat((SNAPSHOTDIR+dirInfo->dirname).toUtf8(), &statbuf) == -1)
+			break;
 		QDateTime now = QDateTime::currentDateTime();
 		QDateTime modified;
 		modified.setTime_t(statbuf.st_mtime);
 		if (modified.secsTo(now) > 5)
-			goto ok;
+			break;
 		sleep(1);
 	}
-ok:
-	dirInfo.dirname = dirname;
-	dirInfo.dirsize = recursiveSize(SNAPSHOTDIR+dirname);
-	dirInfo.date = snapshotDirectoryDate(SNAPSHOTDIR+dirname);
-	return dirInfo;
+	dirInfo->dirsize = recursiveSize(SNAPSHOTDIR+dirInfo->dirname);
+	dirInfo->date = snapshotDirectoryDate(SNAPSHOTDIR+dirInfo->dirname);
 }
 
 static void
@@ -133,7 +129,7 @@ recursiveRemove(QString path, bool removeDirectory)
 }
 
 static void
-doClearEnduranceData(QFutureWatcher<DirectoryInfo> *_dirInfoWatcher)
+doClearEnduranceData(QFutureWatcher<void> *_dirInfoWatcher)
 {
 	_dirInfoWatcher->cancel();
 	_dirInfoWatcher->waitForFinished();
@@ -152,44 +148,19 @@ EnduranceDirectoryModel::EnduranceDirectoryModel(QObject *parent)
 
 	QDir().mkpath(SNAPSHOTDIR);
 
-	_fsModel.setReadOnly(false);
-	_fsModel.setRootPath(SNAPSHOTDIR);
 
-	connect(&_dirInfoWatcher, SIGNAL(resultsReadyAt(int,int)),
-		this, SLOT(slotDirInfoResultsReadyAt(int,int)));
+	_fsWatcher.addPath(SNAPSHOTDIR);
+	connect(&_fsWatcher, SIGNAL(directoryChanged(const QString &)),
+			this, SLOT(slotDirectoryChanged(const QString &)));
+
+	slotDirectoryChanged(SNAPSHOTDIR);
+
+	connect(&_dirInfoWatcher, SIGNAL(finished()),
+		this, SLOT(dirInfoFinished()));
 	connect(&_clearWatcher, SIGNAL(finished()),
 		this, SLOT(clearFinished()));
-
-	connect(&_fsModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-		this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
-	connect(&_fsModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
-		this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex &, int, int)));
-	connect(&_fsModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
-		this, SLOT(slotRowsRemoved(const QModelIndex &, int, int)));
-
-	_fsModel.setNameFilters(QStringList()
-			<< "[0-9][0-9][0-9]"
-			<< "[0-9][0-9][0-9][0-9]"
-			<< "[0-9][0-9][0-9][0-9][0-9]");
-	_fsModel.setNameFilterDisables(false);
 }
 
-void EnduranceDirectoryModel::slotRowsInserted(const QModelIndex &parent, int start, int end)
-{
-	qDebug() << Q_FUNC_INFO << ":" << parent << ",start:" << start << ",end:" << end;
-	Q_UNUSED(parent);
-	beginInsertRows(QModelIndex(), start, end);
-	for (int row=start; row <= end; ++row) {
-		QModelIndex fsIndex = _fsModel.index(row, 0, fsRootIndex());
-		QString path = _fsModel.data(fsIndex, Qt::DisplayRole).toString();
-		if (path.isEmpty())
-			continue;
-		_dirInfoQueue.append(path);
-	}
-	kickDirInfoWatcher();
-	endInsertRows();
-	emit rowCountChanged();
-}
 
 void EnduranceDirectoryModel::kickDirInfoWatcher()
 {
@@ -203,31 +174,6 @@ void EnduranceDirectoryModel::kickDirInfoWatcher()
 				_dirInfoQueue.takeFirst()));
 }
 
-void EnduranceDirectoryModel::slotRowsRemoved(const QModelIndex &parent, int start, int end)
-{
-	qDebug() << Q_FUNC_INFO << ":" << parent << ",start:" << start << ",end:" << end;
-	Q_UNUSED(parent);
-	beginRemoveRows(QModelIndex(), start, end);
-	endRemoveRows();
-	emit rowCountChanged();
-}
-
-void EnduranceDirectoryModel::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
-{
-	qDebug() << Q_FUNC_INFO << ":" << parent << ",start:" << start << ",end:" << end;
-	Q_UNUSED(parent);
-	if (_directories.isEmpty())
-		return;
-	for (int row=start; row <= end; ++row) {
-		QModelIndex fsIndex = _fsModel.index(row, 0, fsRootIndex());
-		QString path = _fsModel.data(fsIndex, Qt::DisplayRole).toString();
-		if (path.isEmpty())
-			continue;
-		qDebug() << Q_FUNC_INFO << ": deleting path:" << path;
-		_directories.remove(path);
-	}
-	emit totalSizeMBChanged();
-}
 
 int EnduranceDirectoryModel::rowCount(const QModelIndex &parent) const
 {
@@ -237,39 +183,33 @@ int EnduranceDirectoryModel::rowCount(const QModelIndex &parent) const
 
 int EnduranceDirectoryModel::rowCount() const
 {
-	int ret = _fsModel.rowCount(fsRootIndex());
-	qDebug() << Q_FUNC_INFO << ":" << ret;
+	int ret = _directories.size();
+	//qDebug() << Q_FUNC_INFO << ":" << ret;
 	return ret;
 }
 
 QVariant EnduranceDirectoryModel::data(const QModelIndex &index, int role) const
 {
 	qDebug() << Q_FUNC_INFO << "index:" << index << ", role:" << role;
-	QModelIndex fsIndex = _fsModel.index(index.row(), 0, fsRootIndex());
-	QVariant dirName = _fsModel.data(fsIndex, Qt::DisplayRole);
-	if (role == TitleRole) {
-		return dirName;
-	}
-	if (role == SubtitleRole) {
-		QString path = dirName.toString();
-		qDebug() << Q_FUNC_INFO << "SubtitleRole:" << path;
-		if (path.isEmpty()) {
-			return QVariant();
+	if (index.row() >= 0 && index.row() < _directories.size()) {
+		const QSharedPointer<DirectoryInfo> &dirInfo = _directories[index.row()];
+		if (role == TitleRole) {
+			return dirInfo->dirname;
 		}
-		if (_directories.contains(path)) {
-			qDebug() << Q_FUNC_INFO << "SubtitleRole: got dirInfo!";
-			const DirectoryInfo &dirInfo = _directories[path];
-			if (!dirInfo.date.isEmpty() && dirInfo.dirsize > 0) {
-				return tr("%1 - %2 kB")
-					.arg(dirInfo.date)
-					.arg(dirInfo.dirsize/1024);
-			} else if (dirInfo.dirsize > 0) {
-				return tr("%1 kB").arg(dirInfo.dirsize/1024);
+		if (role == SubtitleRole) {
+			if (!dirInfo->isEmpty()) {
+				qDebug() << Q_FUNC_INFO << "SubtitleRole: got dirInfo!";
+				if (!dirInfo->date.isEmpty() && dirInfo->dirsize > 0) {
+					return tr("%1 - %2 kB")
+						.arg(dirInfo->date)
+						.arg(dirInfo->dirsize/1024);
+				} else if (dirInfo->dirsize > 0) {
+					return tr("%1 kB").arg(dirInfo->dirsize/1024);
+				}
 			}
 		}
-		return QVariant();
 	}
-	return _fsModel.data(fsIndex, role);
+	return QVariant();
 }
 
 void EnduranceDirectoryModel::clearEnduranceData()
@@ -278,7 +218,9 @@ void EnduranceDirectoryModel::clearEnduranceData()
 		return;
 	_clearInProgress = true;
 	emit clearingChanged();
+	beginRemoveRows(QModelIndex(), 0, _directories.size() - 1);
 	_directories.clear();
+	endRemoveRows();
 	emit totalSizeMBChanged();
 	_dirInfoQueue.clear();
 	QFuture<void> future = QtConcurrent::run(doClearEnduranceData, &_dirInfoWatcher);
@@ -294,23 +236,9 @@ EnduranceDirectoryModel::index(int row, int column, const QModelIndex &parent) c
 	return createIndex(row, 0);
 }
 
-// TODO: Allow removal of single endurance directories.
-/*
-bool EnduranceDirectoryModel::rmdir(const QModelIndex &index) const
+void EnduranceDirectoryModel::dirInfoFinished()
 {
 	qDebug() << Q_FUNC_INFO;
-	return _fsModel.rmdir(index);
-}
-*/
-
-void EnduranceDirectoryModel::slotDirInfoResultsReadyAt(int beginIndex, int endIndex)
-{
-	qDebug() << Q_FUNC_INFO << ":" << beginIndex << "-" << endIndex;
-	for (int i=beginIndex; i < endIndex; ++i) {
-		DirectoryInfo result = _dirInfoWatcher.resultAt(i);
-		qDebug() << Q_FUNC_INFO << ":" << result.dirname << ":" << result.date << ":" << (result.dirsize/1024);
-		_directories[result.dirname] = result;
-	}
 	emit totalSizeMBChanged();
 	emit dataChanged(createIndex(0, 0), createIndex(rowCount(), 0));
 	_dirInfoWatcherBusy = false;
@@ -341,12 +269,69 @@ QStringList EnduranceDirectoryModel::directoryList() const
 int EnduranceDirectoryModel::totalSizeMB() const
 {
 	quint64 totalSize = 0;
-	foreach (const DirectoryInfo &dirInfo, _directories)
-		totalSize += dirInfo.dirsize;
+	foreach (QSharedPointer<DirectoryInfo> dirInfo, _directories)
+		totalSize += dirInfo->dirsize;
 	return totalSize / (1024*1024);
 }
 
-QModelIndex EnduranceDirectoryModel::fsRootIndex() const
+
+void EnduranceDirectoryModel::slotDirectoryChanged(const QString &path)
 {
-	return _fsModel.index(SNAPSHOTDIR, 0);
+	Q_UNUSED(path);
+	QDir dir(SNAPSHOTDIR);
+	QStringList filter;
+	filter << "[0-9][0-9][0-9]" <<
+			  "[0-9][0-9][0-9][0-9]" <<
+			  "[0-9][0-9][0-9][0-9][0-9]";
+
+	QStringList snapshot = dir.entryList(filter,
+			QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name);
+
+	int iDir = 0, iSnap = 0;
+	while (iDir < _directories.size() && iSnap < snapshot.size()) {
+		int equals = _directories[iDir]->dirname.compare(snapshot[iSnap]);
+		if (equals == 0) {
+			iDir++;
+			iSnap++;
+		}
+		else if (equals > 0) {
+			insertDir(iDir, snapshot[iSnap]);
+		}
+		else {
+			removeDir(iDir);
+		}
+	}
+	if (iDir == _directories.size()) {
+		while (iSnap < snapshot.size()) {
+			insertDir(_directories.size(), snapshot[iSnap]);
+			iSnap++;
+		}
+	}
+	else {
+		while (iDir < _directories.size()) {
+			removeDir(iDir);
+			iDir++;
+		}
+	}
 }
+
+void EnduranceDirectoryModel::insertDir(int index, const QString &dirName)
+{
+	beginInsertRows(QModelIndex(), index, index);
+	QSharedPointer<DirectoryInfo> dirInfo(new DirectoryInfo(dirName));
+	_directories.insert(index, dirInfo);
+	_dirInfoQueue.append(dirInfo);
+	kickDirInfoWatcher();
+	endInsertRows();
+	emit rowCountChanged();
+}
+
+void EnduranceDirectoryModel::removeDir(int index)
+{
+	beginRemoveRows(QModelIndex(), index, index);
+	_directories.remove(index);
+	endRemoveRows();
+	emit rowCountChanged();
+	emit totalSizeMBChanged();
+}
+
