@@ -20,6 +20,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
 #include "EnduranceConstants.h"
 #include "EnduranceDirectoryModel.h"
 #include <QDebug>
@@ -148,7 +149,6 @@ EnduranceDirectoryModel::EnduranceDirectoryModel(QObject *parent)
 
 	QDir().mkpath(SNAPSHOTDIR);
 
-
 	_fsWatcher.addPath(SNAPSHOTDIR);
 	connect(&_fsWatcher, SIGNAL(directoryChanged(const QString &)),
 			this, SLOT(slotDirectoryChanged(const QString &)));
@@ -161,7 +161,6 @@ EnduranceDirectoryModel::EnduranceDirectoryModel(QObject *parent)
 		this, SLOT(clearFinished()));
 }
 
-
 void EnduranceDirectoryModel::kickDirInfoWatcher()
 {
 	qDebug() << Q_FUNC_INFO;
@@ -173,7 +172,6 @@ void EnduranceDirectoryModel::kickDirInfoWatcher()
 	_dirInfoWatcher.setFuture(QtConcurrent::run(directoryInfoFor,
 				_dirInfoQueue.takeFirst()));
 }
-
 
 int EnduranceDirectoryModel::rowCount(const QModelIndex &parent) const
 {
@@ -269,15 +267,14 @@ int EnduranceDirectoryModel::totalSizeMB() const
 	return totalSize / (1024*1024);
 }
 
-
 void EnduranceDirectoryModel::slotDirectoryChanged(const QString &path)
 {
 	Q_UNUSED(path);
 	QDir dir(SNAPSHOTDIR);
 	QStringList filter;
-	filter << "[0-9][0-9][0-9]" <<
-			  "[0-9][0-9][0-9][0-9]" <<
-			  "[0-9][0-9][0-9][0-9][0-9]";
+	filter << "[0-9][0-9][0-9]"
+	       << "[0-9][0-9][0-9][0-9]"
+	       << "[0-9][0-9][0-9][0-9][0-9]";
 
 	QStringList snapshot = dir.entryList(filter,
 			QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name);
@@ -329,4 +326,3 @@ void EnduranceDirectoryModel::removeDir(int index)
 	emit rowCountChanged();
 	emit totalSizeMBChanged();
 }
-

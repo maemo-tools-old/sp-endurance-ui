@@ -152,7 +152,6 @@ bool EnduranceDaemon::valid()
 	return _valid;
 }
 
-
 void EnduranceDaemon::serviceRegistered(const QString &name)
 {
 	Q_UNUSED(name);

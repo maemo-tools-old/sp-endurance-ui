@@ -20,6 +20,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
 #include "EnduranceConstants.h"
 #include "EnduranceArchiver.h"
 #include "EnduranceDirectoryModel.h"
@@ -136,7 +137,6 @@ void EnduranceArchiver::setArchiveError(bool newValue)
 	emit archiveErrorChanged();
 }
 
-
 QString EnduranceArchiver::createArchiveName(const QString &prefix)
 {
 	QString name(prefix);
@@ -144,4 +144,3 @@ QString EnduranceArchiver::createArchiveName(const QString &prefix)
 	name += ".zip";
 	return name;
 }
-
