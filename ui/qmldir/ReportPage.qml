@@ -72,12 +72,12 @@ Page {
 		}
 
 		Label {
-			text: "<h3>First snapshot:</h3>"
+			text: qsTr("<h3>First snapshot:</h3>")
 			width: parent.width
 		}
 
 		Label {
-			text: qsTr("start with the " + firstSnapshot.value + report.ord(firstSnapshot.value) + " snapshot")
+			text: qsTr("start with the %1%2 snapshot").arg(firstSnapshot.value).arg(report.ord(firstSnapshot.value))
 			horizontalAlignment: Text.AlignHCenter
 			width: parent.width
 		}
@@ -93,7 +93,7 @@ Page {
 		}
 
 		Label {
-			text: "<h3>Snapshot frequency:</h3>"
+			text: qsTr("<h3>Snapshot frequency:</h3>")
 			width: parent.width
 		}
 

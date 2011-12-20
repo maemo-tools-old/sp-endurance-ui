@@ -49,7 +49,7 @@ Page {
 		spacing: 6
 
 		Label {
-			text: "<h3>Periodic snapshotting:</h3>"
+			text: qsTr("<h3>Periodic snapshotting:</h3>")
 			width: parent.width
 		}
 		Button {
@@ -100,7 +100,7 @@ Page {
 		Item { width: parent.width; height: 20 }
 		
 		Label {
-			text: "<h3>Manual snapshotting:</h3>"
+			text: qsTr("<h3>Manual snapshotting:</h3>")
 			width: parent.width
 		}
 		Button {
@@ -112,7 +112,7 @@ Page {
 		Item { width: parent.width; height: 20 }
 
 		Label {
-			text: "<h3>Snapshotting status:</h3>"
+			text: qsTr("<h3>Snapshotting status:</h3>")
 			width: parent.width
 		}
 		Label {

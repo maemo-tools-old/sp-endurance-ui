@@ -129,7 +129,7 @@ Page {
 			qsTr("Archiving...") :
 			enduranceArchiver.archiveError ?
 				qsTr("Error creating archive:<br/>%1").arg(enduranceArchiver.log) :
-				qsTr("Archive created:<br/><tt>MyDocs/Documents/" + enduranceArchiver.outputFilename + "</tt>");
+				qsTr("Archive created:<br/><tt>MyDocs/Documents/%1</tt>").arg(enduranceArchiver.outputFilename);
 		onAccepted: {
 			enduranceArchiver.clearLog()
 		}
