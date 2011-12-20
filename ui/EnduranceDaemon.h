@@ -79,8 +79,8 @@ private:
 	bool _collectionFailed : 1;
 	bool _periodicCollectionActive : 1;
 	bool _takingSnapshot : 1;
+	bool _valid : 1;
 	int _snapshotIntervalInMinutes;
-	bool _valid;
 	QString _nextCollectionTimestamp;
 	com::nokia::EnduranceDaemon _enduranceDaemon;
 	QDBusServiceWatcher *_serviceWatcher;
