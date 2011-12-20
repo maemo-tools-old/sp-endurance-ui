@@ -47,8 +47,8 @@ Page {
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		spacing: 6
-	
+		spacing: 10
+
 		ReportingControl {
 			width: parent.width
 			titleText: qsTr("Endurance Plot")
@@ -60,8 +60,6 @@ Page {
 			enduranceDirectoryModel: report.enduranceDirectoryModel
 		}
 
-		Item { width: parent.width; height: 20 }
-
 		ReportingControl {
 			width: parent.width
 			titleText: qsTr("Endurance Report")
@@ -72,8 +70,6 @@ Page {
 			}
 			enduranceDirectoryModel: report.enduranceDirectoryModel
 		}
-
-		Item { width: parent.width; height: 20 }
 
 		Label {
 			text: "<h3>First snapshot:</h3>"
