@@ -20,8 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCECOMPRESSOR_H
-#define ENDURANCECOMPRESSOR_H
+
+#ifndef ENDURANCEARCHIVER_H
+#define ENDURANCEARCHIVER_H
 
 #include <QObject>
 #include <QProcess>
@@ -81,4 +82,4 @@ private:
 	QString _outputFilename;
 };
 
-#endif /* ENDURANCECOMPRESSOR_H */
+#endif /* ENDURANCEARCHIVER_H */

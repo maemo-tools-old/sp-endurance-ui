@@ -20,8 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef REPORTARCHIVER_OPTIONS_H_
-#define REPORTARCHIVER_OPTIONS_H_
+
+#ifndef REPORTARCHIVEROPTIONS_H
+#define REPORTARCHIVEROPTIONS_H
 
 #include "EnduranceConstants.h"
 #include "ArchiverOptions.h"
@@ -46,6 +47,4 @@ class ReportArchiverOptions : public ArchiverOptions
 	virtual QString outputTemplate() const { return "sp-endurance-report"; }
 };
 
-
-
-#endif /* REPORTARCHIVESOURCE_H_ */
+#endif /* REPORTARCHIVEROPTIONS_H */

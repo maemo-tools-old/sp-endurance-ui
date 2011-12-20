@@ -20,8 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCELOGREADER_H_
-#define ENDURANCELOGREADER_H_
+
+#ifndef ENDURANCELOGREADER_H
+#define ENDURANCELOGREADER_H
 
 #include <QObject>
 #include <QFileSystemWatcher>
@@ -63,4 +64,4 @@ private:
 	QFileSystemWatcher _watcher;
 };
 
-#endif /* ENDURANCELOGREADER_H_ */
+#endif /* ENDURANCELOGREADER_H */

@@ -20,10 +20,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ARCHIVER_OPTIONS_H_
-#define ARCHIVER_OPTIONS_H_
 
-#include"EnduranceConstants.h"
+#ifndef ARCHIVEROPTIONS_H
+#define ARCHIVEROPTIONS_H
+
+#include "EnduranceConstants.h"
 
 #include <QObject>
 #include <QStringList>
@@ -31,8 +32,10 @@
 /**
  * The base source file/directory provider for the EnduranceArchiver.
  */
-class ArchiverOptions : public QObject {
+class ArchiverOptions : public QObject
+{
 	Q_OBJECT
+
 public:
 	/**
 	 * The list of files/directories to archive.
@@ -58,6 +61,4 @@ public:
 	virtual QString outputPath() const { return ARCHIVEDIR; }
 };
 
-
-
-#endif /* DIRECTORYMODEL_H_ */
+#endif /* ARCHIVEROPTIONS_H */

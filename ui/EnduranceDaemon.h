@@ -20,8 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef ENDURANCECONTROL_H
-#define ENDURANCECONTROL_H
+
+#ifndef ENDURANCEDAEMON_H
+#define ENDURANCEDAEMON_H
 
 #include "endurancedaemon_interface.h"
 #include <QObject>
@@ -86,4 +87,4 @@ private:
 	QDBusServiceWatcher *_serviceWatcher;
 };
 
-#endif /* ENDURANCECONTROL_H */
+#endif /* ENDURANCEDAEMON_H */
