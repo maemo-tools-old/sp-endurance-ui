@@ -102,10 +102,9 @@ Page {
 		}
 
 		Label {
-			text: nextSnapshot.value == nextSnapshot.maximumValue ? "use the first and the last (total 2)" : 
-				qsTr("use every " + nextSnapshot.value + report.ord(nextSnapshot.value)) + qsTr(" (total " + 
-				(Math.ceil((enduranceDirectoryModel.rowCount - firstSnapshot.value) / nextSnapshot.value) + 1) + ")")
-				
+			text: nextSnapshot.value == nextSnapshot.maximumValue ?
+				qsTr("use the first and the last") :
+				qsTr("use every %1%2").arg(nextSnapshot.value).arg(report.ord(nextSnapshot.value))
 			horizontalAlignment: Text.AlignHCenter
 			width: parent.width
 		}
@@ -119,6 +118,21 @@ Page {
 			stepSize: 1
 			valueIndicatorVisible: true
 			width: parent.width			
+		}
+
+		Label {
+			visible: enduranceDirectoryModel.rowCount >= 2
+			text: {
+				var snapshots;
+				if (nextSnapshot.value == nextSnapshot.maximumValue)
+					snapshots = 2;
+				else
+					snapshots = Math.ceil((enduranceDirectoryModel.rowCount
+						- firstSnapshot.value) / nextSnapshot.value) + 1;
+				return qsTr("Total number of snapshots used for plot and report generation: <b>%1</b>")
+					.arg(snapshots);
+			}
+			width: parent.width
 		}
 	}
 }
