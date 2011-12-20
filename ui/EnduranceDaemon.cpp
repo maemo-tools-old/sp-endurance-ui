@@ -29,6 +29,7 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	, _collectionFailed(false)
 	, _periodicCollectionActive(false)
 	, _takingSnapshot(false)
+	, _valid(false)
 	, _snapshotIntervalInMinutes(1)
 	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
 		QLatin1String("/com/nokia/EnduranceDaemon"), QDBusConnection::systemBus(), parent)
