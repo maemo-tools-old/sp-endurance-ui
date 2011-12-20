@@ -32,7 +32,8 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	, _valid(false)
 	, _snapshotIntervalInMinutes(1)
 	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
-		QLatin1String("/com/nokia/EnduranceDaemon"), QDBusConnection::systemBus(), parent)
+		QLatin1String("/com/nokia/EnduranceDaemon"),
+		QDBusConnection::systemBus(), parent)
 	, _serviceWatcher(NULL)
 {
 	connect(&_enduranceDaemon, SIGNAL(collectionFailedChanged(bool)),
@@ -52,7 +53,8 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	_snapshotIntervalInMinutes = _enduranceDaemon.snapshotIntervalInMinutes();
 	_nextCollectionTimestamp = _enduranceDaemon.nextCollectionTimestamp();
 
-	 _serviceWatcher = new QDBusServiceWatcher("com.nokia.EnduranceDaemon", QDBusConnection::systemBus(),
+	 _serviceWatcher = new QDBusServiceWatcher("com.nokia.EnduranceDaemon",
+			 QDBusConnection::systemBus(),
 			 QDBusServiceWatcher::WatchForOwnerChange, this);
 	 connect(_serviceWatcher, SIGNAL(serviceUnregistered(const QString &)),
 			 this, SLOT(serviceUnregistered(const QString&)));
