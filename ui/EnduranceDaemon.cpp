@@ -33,7 +33,7 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	, _snapshotIntervalInMinutes(1)
 	, _enduranceDaemon(QLatin1String("com.nokia.EnduranceDaemon"),
 		QLatin1String("/com/nokia/EnduranceDaemon"), QDBusConnection::systemBus(), parent)
-	, _serviceWatcher(0)
+	, _serviceWatcher(NULL)
 {
 	connect(&_enduranceDaemon, SIGNAL(collectionFailedChanged(bool)),
 			this, SLOT(collectionFailedChangedSlot(bool)));
