@@ -49,6 +49,32 @@ Page {
 		anchors.bottom: parent.bottom
 		spacing: 6
 	
+		ReportingControl {
+			width: parent.width
+			titleText: qsTr("Endurance Plot")
+			firstSnapshot: firstSnapshot
+			nextSnapshot: nextSnapshot
+			reportControl: EndurancePlotControl {
+				enduranceDirectoryModel: report.enduranceDirectoryModel
+			}
+			enduranceDirectoryModel: report.enduranceDirectoryModel
+		}
+
+		Item { width: parent.width; height: 20 }
+
+		ReportingControl {
+			width: parent.width
+			titleText: qsTr("Endurance Report")
+			firstSnapshot: firstSnapshot
+			nextSnapshot: nextSnapshot
+			reportControl: EnduranceReportControl {
+				enduranceDirectoryModel: report.enduranceDirectoryModel
+			}
+			enduranceDirectoryModel: report.enduranceDirectoryModel
+		}
+
+		Item { width: parent.width; height: 20 }
+
 		Label {
 			text: "<h3>First snapshot:</h3>"
 			width: parent.width
@@ -93,32 +119,6 @@ Page {
 			stepSize: 1
 			valueIndicatorVisible: true
 			width: parent.width			
-		}
-	
-		Item { width: parent.width; height: 20 }
-	
-		ReportingControl {
-			width: parent.width
-			titleText: qsTr("Endurance Plot")
-			firstSnapshot: firstSnapshot
-			nextSnapshot: nextSnapshot
-			reportControl: EndurancePlotControl {
-				enduranceDirectoryModel: report.enduranceDirectoryModel
-			}
-			enduranceDirectoryModel: report.enduranceDirectoryModel
-		}
-	
-		Item { width: parent.width; height: 20 }
-	
-		ReportingControl {
-			width: parent.width
-			titleText: qsTr("Endurance Report")
-			firstSnapshot: firstSnapshot
-			nextSnapshot: nextSnapshot
-			reportControl: EnduranceReportControl {
-				enduranceDirectoryModel: report.enduranceDirectoryModel
-			}
-			enduranceDirectoryModel: report.enduranceDirectoryModel
 		}
 	}
 }
