@@ -30,17 +30,17 @@ Page {
 	id: report
 	property EnduranceDirectoryModel enduranceDirectoryModel
 	anchors.margins: UI.DEFAULT_MARGIN
-	
+
 	function ord(value) {
 		var suffix = ["th", "st", "nd", "rd"]
 		var digit = value % 10
 		if (value > 3 && value < 21 || digit > 3) return "th"
 		return suffix[digit]
 	}
-	
+
 	Header {
 		id: header
-	}	
+	}
 	Column {
 		anchors.topMargin: UI.DEFAULT_MARGIN
 		anchors.top: header.bottom
@@ -89,9 +89,9 @@ Page {
 			value: 1
 			stepSize: 1
 			valueIndicatorVisible: true
-			width: parent.width			
+			width: parent.width
 		}
-	
+
 		Label {
 			text: "<h3>Snapshot frequency:</h3>"
 			width: parent.width
@@ -109,11 +109,11 @@ Page {
 			id: nextSnapshot
 			minimumValue: 1
 			maximumValue: enduranceDirectoryModel.rowCount == 0 ? 1 :
-							Math.ceil(((enduranceDirectoryModel.rowCount - firstSnapshot.value) / 2) + 1)
+					Math.ceil(((enduranceDirectoryModel.rowCount - firstSnapshot.value) / 2) + 1)
 			value: 1
 			stepSize: 1
 			valueIndicatorVisible: true
-			width: parent.width			
+			width: parent.width
 		}
 
 		Label {
