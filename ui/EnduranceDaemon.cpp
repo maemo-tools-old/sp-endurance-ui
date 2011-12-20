@@ -48,10 +48,9 @@ EnduranceDaemon::EnduranceDaemon(QObject *parent)
 	_collectionFailed = _enduranceDaemon.collectionFailed();
 	_periodicCollectionActive = _enduranceDaemon.periodicCollectionActive();
 	_takingSnapshot = _enduranceDaemon.takingSnapshot();
+	 _valid = _enduranceDaemon.isValid();
 	_snapshotIntervalInMinutes = _enduranceDaemon.snapshotIntervalInMinutes();
 	_nextCollectionTimestamp = _enduranceDaemon.nextCollectionTimestamp();
-
-	 _valid = _enduranceDaemon.isValid();
 
 	 _serviceWatcher = new QDBusServiceWatcher("com.nokia.EnduranceDaemon", QDBusConnection::systemBus(),
 			 QDBusServiceWatcher::WatchForOwnerChange, this);
