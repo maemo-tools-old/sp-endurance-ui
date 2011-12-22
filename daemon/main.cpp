@@ -25,7 +25,6 @@
 #include "endurancedaemon_adaptor.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
-#include <stdio.h>
 #include <syslog.h>
 
 int main(int argc, char **argv)
