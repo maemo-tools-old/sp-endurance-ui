@@ -33,8 +33,7 @@ int main(int argc, char **argv)
 	QCoreApplication app(argc, argv);
 	EnduranceDaemon daemon;
 	app.connect(&daemon, SIGNAL(shutdown()), SLOT(quit()));
-
-	new EnduranceDaemonAdaptor(&daemon);
+	EnduranceDaemonAdaptor adaptor(&daemon);
 	QDBusConnection connection = QDBusConnection::systemBus();
 	if (!connection.isConnected()) {
 		syslog(LOG_ERR,
