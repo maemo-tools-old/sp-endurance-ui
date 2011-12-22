@@ -65,7 +65,7 @@ EXPORT_MAIN int main(int argc, char **argv)
 	qmlRegisterType<DataArchiverOptions>("com.nokia.endurance", 1, 0, "DataArchiverOptions");
 	qmlRegisterType<ReportArchiverOptions>("com.nokia.endurance", 1, 0, "ReportArchiverOptions");
 	//QDir::setCurrent(app.applicationDirPath());
-	window->setSource(QUrl("qrc:/qmldir/main.qml"));
+	window->setSource(QUrl("qrc:/qml-qtquick10/main.qml"));
 	window->showFullScreen();
 	int rc = app->exec();
 

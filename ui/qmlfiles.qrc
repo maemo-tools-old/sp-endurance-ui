@@ -23,14 +23,14 @@
  -->
 <RCC>
     <qresource prefix="/">
-        <file>qmldir/main.qml</file>
-        <file>qmldir/MainPage.qml</file>
-        <file>qmldir/ReportingControl.qml</file>
-        <file>qmldir/Header.qml</file>
-        <file>qmldir/EnduranceDirectoryPage.qml</file>
-        <file>qmldir/ControlPage.qml</file>
-        <file>qmldir/SnapshotIntervalDialog.qml</file>
-        <file>qmldir/HelpPage.qml</file>
-        <file>qmldir/ReportPage.qml</file>
+        <file>qml-qtquick10/main.qml</file>
+        <file>qml-qtquick10/MainPage.qml</file>
+        <file>qml-qtquick10/ReportingControl.qml</file>
+        <file>qml-qtquick10/Header.qml</file>
+        <file>qml-qtquick10/EnduranceDirectoryPage.qml</file>
+        <file>qml-qtquick10/ControlPage.qml</file>
+        <file>qml-qtquick10/SnapshotIntervalDialog.qml</file>
+        <file>qml-qtquick10/HelpPage.qml</file>
+        <file>qml-qtquick10/ReportPage.qml</file>
     </qresource>
 </RCC>
