@@ -50,8 +50,8 @@ int main(int argc, char **argv)
 	}
 	if (!connection.registerObject("/com/nokia/EnduranceDaemon", &daemon)) {
 		syslog(LOG_ERR,
-			"EnduranceDaemon ERROR: unable to register root "
-			"object.\n");
+			"EnduranceDaemon ERROR: unable to register object "
+			"/com/nokia/EnduranceDaemon.\n");
 		return 1;
 	}
 	int rc =  app.exec();
