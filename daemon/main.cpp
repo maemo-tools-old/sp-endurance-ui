@@ -44,7 +44,8 @@ int main(int argc, char **argv)
 	if (!connection.registerService("com.nokia.EnduranceDaemon")) {
 		syslog(LOG_ERR,
 			"EnduranceDaemon ERROR: unable to register DBus "
-			"service 'com.nokia.EnduranceDaemon' (%s).", connection.lastError().message().toAscii().data());
+			"service 'com.nokia.EnduranceDaemon' (%s).",
+			connection.lastError().message().toAscii().data());
 		return 1;
 	}
 	if (!connection.registerObject("/com/nokia/EnduranceDaemon", &daemon)) {
